@@ -12,5 +12,13 @@ kubectl run kubia --image=$1/kubia --port=8080 --generator=run/v1
 # kubectl get nodes
 # kubectl describe node
 
+kubectl expose rc kubia --type=LoadBalancer --name kubia-http
+external_ip=$(echo "$(kubectl get service | grep kubia-http)" | awk  '{print $4}')
 
+# kubectl get svc
+# kubectl get rc
 
+kubectl scale rc kubia --replicas=3
+
+# kubectl get pods -o wide
+# kubectl describe pod kubia-92krq
