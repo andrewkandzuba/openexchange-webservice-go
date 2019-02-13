@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kubia-namespace
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: kubia
+  namespace: kubia-namespace
+  labels:
+    run: kubia
+spec:
+  replicas: 3
+  selector:
+    run: kubia
+  template:
+    metadata:
+      name: kubia
+      namespace: kubia-namespace
+      labels:
+        run: kubia
+        app: edu
+        env: canary
+    spec:
+      containers:
+        - image: DOCKER_USER_NAME/kubia
+          name: kubia
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubia-http
+  namespace: kubia-namespace
+spec:
+  selector:
+    run: kubia
+  ports:
+    - port: 8080
+      protocol: TCP
+  type: LoadBalancer
