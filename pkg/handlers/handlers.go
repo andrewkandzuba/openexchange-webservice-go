@@ -21,6 +21,8 @@ func HitHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func HealthHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("You've hit liveness probe\n")
+
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	_, _ = io.WriteString(w, `{"alive": true}`)

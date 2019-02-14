@@ -29,6 +29,10 @@ spec:
           ports:
             - containerPort: 8080
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /health
 ---
 apiVersion: v1
 kind: Service
