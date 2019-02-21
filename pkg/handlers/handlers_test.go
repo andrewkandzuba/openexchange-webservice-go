@@ -8,26 +8,62 @@ import (
 	"testing"
 )
 
-func TestHitHandler(t *testing.T)  {
-	req, err := http.NewRequest("GET", "/", nil)
-	assert.Nil(t, err)
-
-	rr := httptest.NewRecorder()
+func TestHitHandler(t *testing.T) {
 	handler := http.HandlerFunc(HitHandler)
-	handler.ServeHTTP(rr, req)
+	ts := httptest.NewServer(handler)
+	defer ts.Close()
 
-	assert.EqualValues(t, http.StatusOK, rr.Code)
-	assert.True(t, strings.Contains(rr.Body.String(), "You've hit"))
+	req := httptest.NewRequest("GET", "/", nil)
+	w := httptest.NewRecorder()
+	handler(w, req)
+
+	assert.EqualValues(t, http.StatusOK, w.Code)
+	assert.True(t, strings.Contains(w.Body.String(), "You've hit"))
 }
 
 func TestHealthHandler(t *testing.T) {
-	req, err := http.NewRequest("GET", "/health", nil)
-	assert.Nil(t, err)
-
-	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(HealthHandler)
-	handler.ServeHTTP(rr, req)
+	ts := httptest.NewServer(handler)
+	defer ts.Close()
 
-	assert.EqualValues(t, http.StatusOK, rr.Code)
-	assert.EqualValues(t, `{"alive": true}`, rr.Body.String())
+	req := httptest.NewRequest("GET", "/health", nil)
+	w := httptest.NewRecorder()
+	handler.ServeHTTP(w, req)
+
+	assert.EqualValues(t, http.StatusOK, w.Code)
+	assert.EqualValues(t, `{"alive": true}`, w.Body.String())
+}
+
+func TestStopHandler(t *testing.T) {
+	alive.Set(true)
+	assert.True(t, alive.Get())
+
+	stop := http.HandlerFunc(StopHandler)
+	ts := httptest.NewServer(stop)
+	defer ts.Close()
+
+	req := httptest.NewRequest("POST", "/stop", nil)
+	w := httptest.NewRecorder()
+	stop.ServeHTTP(w, req)
+
+	assert.EqualValues(t, http.StatusOK, w.Code)
+	assert.Empty(t, w.Body.String())
+
+	assert.False(t, alive.Get())
+}
+
+func TestHealthHandlerBeforeAndAfterStop(t *testing.T) {
+	alive.Set(false)
+	assert.False(t, alive.Get())
+
+	health := http.HandlerFunc(HealthHandler)
+	ts := httptest.NewServer(health)
+	defer ts.Close()
+
+	req := httptest.NewRequest("GET", "/health", nil)
+	w := httptest.NewRecorder()
+	health.ServeHTTP(w, req)
+
+	assert.EqualValues(t, http.StatusInternalServerError, w.Code)
+	assert.EqualValues(t, `{"alive": false}`, w.Body.String())
 }

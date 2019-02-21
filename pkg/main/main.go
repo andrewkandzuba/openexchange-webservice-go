@@ -12,5 +12,6 @@ func main() {
 	log.Print("Kubia server starting ...")
 	http.HandleFunc("/", handlers.HitHandler)
 	http.HandleFunc("/health", handlers.HealthHandler)
+	http.HandleFunc("/stop", handlers.StopHandler)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

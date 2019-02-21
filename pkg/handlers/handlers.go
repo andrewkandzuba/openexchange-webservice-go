@@ -2,11 +2,14 @@ package handlers
 
 import (
 	"fmt"
+	"github.com/andrewkandzuba/openexchange-webservice-go/pkg/state"
 	"io"
 	"log"
 	"net/http"
 	"os"
 )
+
+var alive = state.New()
 
 func HitHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Recieved request from %s", r.RemoteAddr)
@@ -21,9 +24,23 @@ func HitHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func HealthHandler(w http.ResponseWriter, r *http.Request) {
-	log.Printf("You've hit liveness probe\n")
+	log.Printf("You've hit liveness probe")
+
+	w.Header().Set("Content-Type", "application/json")
+
+	if !alive.Get() {
+		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = io.WriteString(w, `{"alive": false}`)
+	} else {
+		w.WriteHeader(http.StatusOK)
+		_, _ = io.WriteString(w, `{"alive": true}`)
+	}
+}
+
+func StopHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("You've hit stop handler")
+
+	alive.Set(false)
 
 	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "application/json")
-	_, _ = io.WriteString(w, `{"alive": true}`)
 }

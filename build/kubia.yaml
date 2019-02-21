@@ -33,6 +33,7 @@ spec:
             httpGet:
               port: 8080
               path: /health
+            initialDelaySeconds: 15
 ---
 apiVersion: v1
 kind: Service
