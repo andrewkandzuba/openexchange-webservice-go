@@ -8,8 +8,6 @@ kind: ReplicationController
 metadata:
   name: kubia
   namespace: kubia-namespace
-  labels:
-    run: kubia
 spec:
   replicas: 3
   selector:
