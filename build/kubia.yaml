@@ -3,15 +3,16 @@ kind: Namespace
 metadata:
   name: kubia-namespace
 ---
-apiVersion: v1
-kind: ReplicationController
+apiVersion: apps/v1
+kind: ReplicaSet
 metadata:
   name: kubia
   namespace: kubia-namespace
 spec:
   replicas: 3
   selector:
-    run: kubia
+    matchLabels:
+      run: kubia
   template:
     metadata:
       name: kubia
