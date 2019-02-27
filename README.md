@@ -35,7 +35,7 @@ $ ./build/kubernetes.sh andrewkandzuba/webservice
 
 - Wait until after service **webservice-http** receives EXTERNAL-IP:
 ```bash
-$ kuberctl get svc -n edu-namespace
+$ kubectl get svc -n edu-namespace
 NAME         TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)          AGE
 webservice-http   LoadBalancer   10.55.254.157   35.184.166.36   8080:30553/TCP   2m
 ```
