@@ -1,4 +1,4 @@
-package main
+package manager
 
 import (
 	"github.com/andrewkandzuba/openexchange-webservice-go/pkg/handlers"
