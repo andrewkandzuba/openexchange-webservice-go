@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-#set -euo pipefail
-set +x
+set -euo pipefail
 
 echo "Deploying to Kubernetes ..."
 
