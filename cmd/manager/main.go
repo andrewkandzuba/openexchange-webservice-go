@@ -9,7 +9,7 @@ import (
 var port = "8080"
 
 func main() {
-	log.Print("Kubia server starting ...")
+	log.Print("Http server starting ...")
 	http.HandleFunc("/", handlers.HitHandler)
 	http.HandleFunc("/health", handlers.HealthHandler)
 	http.HandleFunc("/stop", handlers.StopHandler)

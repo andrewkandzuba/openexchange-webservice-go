@@ -4,7 +4,7 @@ set -euo pipefail
 
 echo "Building new docker image ..."
 
-cat << EOF | docker build . -t kubia -f -
+cat << EOF | docker build . -t webservice -f -
 FROM golang:latest
 RUN mkdir -p /go/src/github.com/andrewkandzuba/openexchange-webservice-go/pkg
 ADD pkg /go/src/github.com/andrewkandzuba/openexchange-webservice-go/pkg

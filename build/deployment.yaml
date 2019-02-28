@@ -1,23 +1,22 @@
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
-  name: kubia
+  name: webservice
 spec:
   replicas: 3
   selector:
     matchLabels:
-      run: kubia
+      app: webservice
   template:
     metadata:
-      name: kubia
+      name: webservice
       labels:
-        run: kubia
-        app: edu
+        app: webservice
         env: canary
     spec:
       containers:
         - image: REPLACE_IMAGE
-          name: kubia
+          name: webservice
           ports:
             - containerPort: 8080
               protocol: TCP
@@ -30,10 +29,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kubia-http
+  name: webservice-http
 spec:
   selector:
-    run: kubia
+    app: webservice
   ports:
     - port: 8080
       protocol: TCP
