@@ -1,0 +1,64 @@
+# This is an example goreleaser.yaml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+project_name: openexchange-webservice-go
+before:
+  hooks:
+    # you may remove this if you don't use vgo
+    - go mod download
+    # you may remove this if you don't need go generate
+    - go generate ./...
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - 386
+      - amd64
+      - arm
+      - arm64
+    main: cmd/manager/main.go
+    ldflags:
+      - -a -installsuffix cgo -s -w -X main.build={{.Version}}
+archive:
+  replacements:
+    darwin: Darwin
+    linux: Linux
+    windows: Windows
+    386: i386
+    amd64: x86_64
+  format_overrides:
+    - goos: windows
+      format: zip
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - Merge pull request
+      - Merge branch
+dockers:
+  - image_templates:
+      - 'andrewkandzuba/openexchange-webservice-go:{{ .Tag }}'
+      - 'andrewkandzuba/openexchange-webservice-go:v{{ .Major }}.{{ .Minor }}'
+      - 'andrewkandzuba/openexchange-webservice-go:latest'
+    dockerfile: Dockerfile
+    binaries:
+      - andrewkandzuba/openexchange-webservice-go
+    build_flag_templates:
+      - "--label=org.label-schema.schema-version=1.0"
+      - "--label=org.label-schema.version={{.Version}}"
+      - "--label=org.label-schema.name={{.ProjectName}}"
+      - "--label=com.github.actions.name={{.ProjectName}}"
+      - "--label=com.github.actions.description=Developing WebService in Golang!"
+      - "--label=repository=http://github.com/andrewkandzuba/openexchange-webservice-go"
+      - "--label=maintainer=Andriy Kandzyuba <andrey.kandzuba@gmail.com>"
+    extra_files:
+      - scripts/entrypoint.sh
