@@ -5,6 +5,7 @@ language: go
 env:
   - GO111MODULE=on
 
+gobuild_args: "-v -coverprofile=coverage.out -covermode=atomic -coverpkg=all"
 go:
   - 1.12.x
 
@@ -22,5 +23,5 @@ notifications:
 before_script:
   - go get -u=patch
 
-script:
-  - go test -v -coverprofile=.build/coverage.out -covermode=atomic -coverpkg=all ./...
+#script:
+#  - go test -v -coverprofile=.build/coverage.out -covermode=atomic -coverpkg=all ./...
