@@ -1,0 +1,27 @@
+sudo: false
+
+language: go
+
+env:
+  - GO111MODULE=on
+
+gobuild_args: "-v -coverprofile=coverage.out -covermode=atomic -coverpkg=all"
+go:
+  - 1.12.x
+
+git:
+  depth: 1
+
+install: true
+
+notifications:
+  email:
+    - andrey.kandzuba@gmail.com
+  on_success: always
+  on_failure: always
+
+before_script:
+  - go get -u=patch
+
+#script:
+#  - go test -v -coverprofile=.build/coverage.out -covermode=atomic -coverpkg=all ./...
