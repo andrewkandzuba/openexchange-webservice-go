@@ -15,8 +15,6 @@ git:
 notifications:
   email:
     - andrey.kandzuba@gmail.com
-  on_success: always
-  on_failure: always
 
 before_script:
   - go get -u=patch
@@ -28,18 +26,21 @@ after_success:
   - export LAST_GIT_TAG_VERSION=$(git describe --abbrev=0 --tags) && export LAST_GIT_TAG_VERSION=${LAST_GIT_TAG_VERSION:1}
   - export GIT_TAG_VERSION=$((LAST_GIT_TAG_VERSION+1))
 
+
 before_deploy:
   - echo "before_deploy"
   - echo TRAVIS_BRANCH=${TRAVIS_BRANCH}
   - echo TRAVIS_BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}
   - echo GIT_TAG_VERSION=${GIT_TAG_VERSION}
-  # Set up git user name and tag this commit
-  #- git config --local user.name "YOUR GIT USER NAME"
-  #- git config --local user.email "YOUR GIT USER EMAIL"
-  #- export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
-  #- git tag $TRAVIS_TAG
+deploy:
+    provider: releases
+    api_key: "GITHUB OAUTH TOKEN"
+    file: "FILE TO UPLOAD"
+    skip_cleanup: true
+    on:
+      tags: true
 
-#deploy:
-#  - on:
-#      all_branches: true
-#      condition: $TRAVIS_BRANCH != master
+stages:
+  - name: deploy
+    # require the branch name to be master (note for PRs this is the base branch name)
+    if: branch = master
