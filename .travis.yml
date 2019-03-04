@@ -26,9 +26,9 @@ after_success:
   - export GIT_TAG_VERSION=$((LAST_GIT_TAG_VERSION+1))
 
 before_deploy:
-  - "echo 'before_deploy\n'"
-  - "echo 'LAST_GIT_TAG_VERSION=${LAST_GIT_TAG_VERSION}\n'"
-  - "echo 'GIT_TAG_VERSION=${GIT_TAG_VERSION}\n'"
+  - echo "before_deploy"
+  - echo "LAST_GIT_TAG_VERSION=${LAST_GIT_TAG_VERSION}'
+  - echo "GIT_TAG_VERSION=${GIT_TAG_VERSION}'
   # Set up git user name and tag this commit
   #- git config --local user.name "YOUR GIT USER NAME"
   #- git config --local user.email "YOUR GIT USER EMAIL"
@@ -39,4 +39,4 @@ deploy:
   - on:
       all_branches: true
       condition: $TRAVIS_BRANCH != master
-      "echo 'deploy'"
+      echo "deploy"
