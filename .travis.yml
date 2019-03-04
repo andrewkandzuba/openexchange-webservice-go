@@ -22,7 +22,7 @@ before_script:
   - go get -u=patch
 
 script:
-  - go test -coverprofile=coverage.out -covermode=atomic -coverpkg=all ./...
+  - go test -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -covermode=atomic -coverpkg=all ./...
 
 after_success:
   - export LAST_GIT_TAG_VERSION=$(git describe --abbrev=0 --tags) && export LAST_GIT_TAG_VERSION=${LAST_GIT_TAG_VERSION:1}
@@ -30,8 +30,9 @@ after_success:
 
 before_deploy:
   - echo "before_deploy"
-  - echo "LAST_GIT_TAG_VERSION=${LAST_GIT_TAG_VERSION}'
-  - echo "GIT_TAG_VERSION=${GIT_TAG_VERSION}'
+  - echo "TRAVIS_BRANCH=${TRAVIS_BRANCH}"
+  - echo "TRAVIS_BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}"
+  - echo "GIT_TAG_VERSION=${GIT_TAG_VERSION}"
   # Set up git user name and tag this commit
   #- git config --local user.name "YOUR GIT USER NAME"
   #- git config --local user.email "YOUR GIT USER EMAIL"
