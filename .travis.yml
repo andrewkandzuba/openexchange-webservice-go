@@ -5,7 +5,7 @@ language: go
 env:
   - GO111MODULE=on
 
-gobuild_args: "-v -coverprofile=coverage.out -covermode=atomic -coverpkg=all"
+gobuild_args: "-v"
 go:
   - 1.12.x
 
@@ -20,6 +20,9 @@ notifications:
 
 before_script:
   - go get -u=patch
+
+script:
+  - go test -coverprofile=.build/coverage.out -covermode=atomic -coverpkg=all ./...
 
 after_success:
   - export LAST_GIT_TAG_VERSION=$(git describe --abbrev=0 --tags) && export LAST_GIT_TAG_VERSION=${LAST_GIT_TAG_VERSION:1}
