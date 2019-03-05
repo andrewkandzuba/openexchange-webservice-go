@@ -33,6 +33,7 @@ kind: Service
 metadata:
   name: webservice-http
 spec:
+  sessionAffinity: ClientIP
   selector:
     app: webservice
   ports:
@@ -42,4 +43,4 @@ spec:
     - name: https
       port: 443
       targetPort: 8443
-#  type: LoadBalancer
+  type: LoadBalancer
