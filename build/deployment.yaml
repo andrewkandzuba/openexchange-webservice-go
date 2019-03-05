@@ -18,8 +18,10 @@ spec:
         - image: REPLACE_IMAGE
           name: webservice
           ports:
-            - containerPort: 8080
-              protocol: TCP
+            - name: http
+              containerPort: 8080
+            - name: https
+              containerPort: 8443
           livenessProbe:
             httpGet:
               port: 8080
@@ -34,6 +36,10 @@ spec:
   selector:
     app: webservice
   ports:
-    - port: 8080
-      protocol: TCP
-  type: LoadBalancer
+    - name: http
+      port: 80
+      targetPort: 8080
+    - name: https
+      port: 443
+      targetPort: 8443
+#  type: LoadBalancer

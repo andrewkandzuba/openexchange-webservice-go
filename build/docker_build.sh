@@ -8,7 +8,7 @@ SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
 rm -rf ${SCRIPTPATH}/../dist/bin/ && \
 go get -u=patch && \
-go test ./... && \
+go test ./... -count=1 && \
 CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ${SCRIPTPATH}/../dist/bin/main -i cmd/manager/main.go
 
 cat << EOF | docker build . -t webservice -f -
