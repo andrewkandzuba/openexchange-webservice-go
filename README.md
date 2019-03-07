@@ -18,6 +18,10 @@ Run primitive, naive web service in Docker
 
 Deploy to Kubernetes
 
+- Optional. If you run behind a corporate proxy set following environment variables as FQND resources with authorization:
+ - HTTP_PROXY 
+ - HTTPS_PROXY 
+
 - Spin up new cluster in Kubernetes: 
 ```bash
 $ gcloud container clusters create edu --machine-type=f1-micro --num-nodes=3 --zone=us-central1-a 
