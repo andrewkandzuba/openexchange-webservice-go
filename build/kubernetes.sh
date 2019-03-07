@@ -27,6 +27,7 @@ echo "Deploying to Kubernetes ..."
 
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
+${SCRIPTPATH}/make.sh && \
 ${SCRIPTPATH}/docker_build.sh && \
 sed -e "s|REPLACE_IMAGE|${DOCKER_IMAGE_NAME}|g" $SCRIPTPATH/docker_push.sh | sh && \
 sed -e "s|REPLACE_IMAGE|${DOCKER_IMAGE_NAME}|g" $SCRIPTPATH/deployment.yaml | kubectl apply -f -

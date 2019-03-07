@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
         - image: REPLACE_IMAGE
+          imagePullPolicy: Always
           name: webservice
           ports:
             - name: http
