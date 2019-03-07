@@ -4,12 +4,11 @@ set -euo pipefail
 
 echo "Building new docker image ..."
 
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-
-rm -rf ${SCRIPTPATH}/../dist/bin/ && \
-go get -u=patch && \
+rm -rf dist/bin && \
+mkdir -p dist/bin && \
+GO111MODULE=on go get -u=patch && \
 go test ./... -count=1 && \
-CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ${SCRIPTPATH}/../dist/bin/main -i cmd/manager/main.go
+CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o dist/bin/main -i cmd/manager/main.go
 
 cat << EOF | docker build . -t webservice -f -
 FROM scratch
