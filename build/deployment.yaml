@@ -32,7 +32,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: webservice
+  name: webservice-lb
 spec:
   sessionAffinity: ClientIP
   selector:
@@ -45,3 +45,21 @@ spec:
       port: 443
       targetPort: 8443
   type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webservice-np
+spec:
+  selector:
+    app: webservice
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      nodePort: 31080
+    - name: https
+      port: 443
+      targetPort: 8443
+      nodePort: 31433
+  type: NodePort

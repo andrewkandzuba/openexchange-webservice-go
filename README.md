@@ -53,4 +53,11 @@ Additional handlers
 - Liveness probe handler is available by `<EXTERNAL-IP>:8080/health`
 - To restart container(s) randomly hit: `<EXTERNAL-IP>:8080/stop` 
 
+## Chapter 5
+
+If you run Kubernetes cluster in Google Cloud Platform do not forget to set firewalls rule to expose nodes ports for NodePort services:
+```bash
+gcloud compute firewall-rules create webservice-np --allow [protocol:port]
+```
+
 Enjoy!
