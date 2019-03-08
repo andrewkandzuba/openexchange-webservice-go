@@ -4,15 +4,23 @@ set -euo pipefail
 
 echo "Building new docker image ..."
 
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+CMD="docker build . -t webservice -f -"
 
-rm -rf ${SCRIPTPATH}/../dist/bin/ && \
-go get -u=patch && \
-go test ./... && \
-CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ${SCRIPTPATH}/../dist/bin/main -i cmd/manager/main.go
+ENV_HTTP_PROXY=""
+if [[ ! -z ${HTTP_PROXY+x} ]];  then
+    ENV_HTTP_PROXY=$(echo "ENV HTTP_PROXY $(echo env ${HTTP_PROXY} | sed -e 's/=/ /g' | awk '{print $2}')")
+fi
 
-cat << EOF | docker build . -t webservice -f -
-FROM scratch
+ENV_HTTPS_PROXY=""
+if [[ ! -z ${HTTPS_PROXY+x} ]];  then
+    ENV_HTTP_PROXY=$(echo "ENV HTTP_PROXY $(echo env ${HTTPS_PROXY} | sed -e 's/=/ /g' | awk '{print $2}')")
+fi
+
+cat << EOF | ${CMD}
+FROM amd64/alpine
+${ENV_HTTP_PROXY}
+${ENV_HTTPS_PROXY}
+RUN apk add --no-cache curl
 ADD dist/bin /
 CMD ["/main"]
 EOF
