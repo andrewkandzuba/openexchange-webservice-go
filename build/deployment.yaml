@@ -32,7 +32,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: webservice-http
+  name: webservice
 spec:
   sessionAffinity: ClientIP
   selector:

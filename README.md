@@ -37,11 +37,11 @@ $ gcloud container clusters create edu --machine-type=f1-micro --num-nodes=3 --z
 $ ./build/kubernetes.sh andrewkandzuba/webservice
 ```  
 
-- Wait until after service **webservice-http** receives EXTERNAL-IP:
+- Wait until after service **webservice** receives EXTERNAL-IP:
 ```bash
 $ kubectl get svc -n edu-namespace
 NAME         TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)          AGE
-webservice-http   LoadBalancer   10.55.254.157   35.184.166.36   8080:30553/TCP   2m
+webservice   LoadBalancer   10.55.254.157   35.184.166.36   8080:30553/TCP   2m
 ```
 - Hit in a browser: `<EXTERNAL-IP>:8080`
 - Alternatively run: `curl -v -i <EXTERNAL-IP>:8080` 
