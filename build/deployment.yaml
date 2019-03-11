@@ -63,3 +63,19 @@ spec:
       targetPort: 8443
       nodePort: 31433
   type: NodePort
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: webservice-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: webservice-np-edu.oapp-dev01.bnsf.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: webservice-np
+              servicePort: 80
