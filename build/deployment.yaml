@@ -68,11 +68,9 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: webservice-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: webservice-np-edu.oapp-dev01.bnsf.com
+    - host: webservice-np-edu.openexchange.io
       http:
         paths:
           - path: /
