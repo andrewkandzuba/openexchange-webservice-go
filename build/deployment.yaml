@@ -64,11 +64,24 @@ spec:
       nodePort: 31433
   type: NodePort
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tls-secret
+type: Opaque
+data:
+  key: KEY
+  cert: CERT
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: webservice-ingress
 spec:
+  tls:
+    - hosts:
+        - webservice-np-edu.openexchange.io
+      secretName: tls-secret
   rules:
     - host: webservice-np-edu.openexchange.io
       http:

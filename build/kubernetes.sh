@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set +x
+set -x
 
 read -r -d '' USAGE << EOM
 Build and deploy to Kubernetes cluster
@@ -29,5 +29,9 @@ SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
 ${SCRIPTPATH}/make.sh && \
 ${SCRIPTPATH}/docker_build.sh && \
-sed -e "s|REPLACE_IMAGE|${DOCKER_IMAGE_NAME}|g" $SCRIPTPATH/docker_push.sh | sh && \
-sed -e "s|REPLACE_IMAGE|${DOCKER_IMAGE_NAME}|g" $SCRIPTPATH/deployment.yaml | kubectl apply -f -
+${SCRIPTPATH}/tls.sh && \
+sed -e "s|REPLACE_IMAGE|${DOCKER_IMAGE_NAME}|g" ${SCRIPTPATH}/docker_push.sh | sh && \
+sed -e "s|REPLACE_IMAGE|${DOCKER_IMAGE_NAME}|g" ${SCRIPTPATH}/deployment.yaml | \
+sed -e "s/KEY/`cat dist//sec//tls.key|base64 -w0`/g" |  \
+sed -e "s/CERT/`cat dist//sec//tls.crt|base64 -w0`/g" | \
+kubectl apply -f -
