@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/andrewkandzuba/openexchange-webservice-go/badge.svg?branch=master)](https://coveralls.io/github/andrewkandzuba/openexchange-webservice-go?branch=master)
+
 # Introduction 
 
 Developing WebService in Golang! Inspired by Marko Luksa "Kubernetes in Action".
