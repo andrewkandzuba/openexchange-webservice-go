@@ -1,0 +1,13 @@
+project_name: openexchange-webservice-go
+builds:
+  - main: cmd/manager/main.go
+binary: gomotics
+goos:
+  - windows
+  - darwin
+  - linux
+goarch:
+  - amd64
+  - arm64
+archive:
+  format: tar.gz

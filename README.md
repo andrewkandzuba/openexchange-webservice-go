@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/andrewkandzuba/openexchange-webservice-go/badge.svg?branch=master)](https://coveralls.io/github/andrewkandzuba/openexchange-webservice-go?branch=master)
+
 # Introduction 
 
 Developing WebService in Golang! Inspired by Marko Luksa "Kubernetes in Action".
@@ -34,7 +36,7 @@ $ gcloud container clusters create edu --machine-type=f1-micro --num-nodes=3 --z
  
 - Run deployment script ending with the image name in Docker Registry.
 ```bash
-$ ./build/kubernetes.sh andrewkandzuba/webservice
+$ ./build/deploy.sh andrewkandzuba/webservice
 ```  
 
 - Wait until after service **webservice** receives EXTERNAL-IP:
