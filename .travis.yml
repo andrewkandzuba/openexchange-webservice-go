@@ -24,14 +24,16 @@ before_script:
   - go get -u
 
 script:
-  - go test -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -covermode=atomic -coverpkg=all ./...
+  - go test -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -covermode=atomic ./...
   - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken ${COVERALLS_REPO_TOKEN}
 
-after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" && ! -z "$TRAVIS_TAG" ]; then curl -sL https://git.io/goreleaser | bash; fi;
+#after_success:
+#  - test -n "$TRAVIS_TAG" && curl -sL https://git.io/goreleaser | bash
 #  - export LAST_GIT_TAG_VERSION=$(git describe --abbrev=0 --tags) && export LAST_GIT_TAG_VERSION=${LAST_GIT_TAG_VERSION:1}
 #  - export GIT_TAG_VERSION=$((LAST_GIT_TAG_VERSION+1))
-
+deploy:
+  provider: script
+  script: curl -sL https://git.io/goreleaser | bash
 #before_deploy:
 #  - echo "before_deploy"
 #  - echo TRAVIS_BRANCH=${TRAVIS_BRANCH}
@@ -44,8 +46,6 @@ after_success:
 #    skip_cleanup: true
 #    on:
 #      tags: true
-
-#stages:
-#  - name: deploy
-    # require the branch name to be master (note for PRs this is the base branch name)
-    # if: branch = master
+stages:
+  - name: deploy
+    if: branch = master && tag IS present
