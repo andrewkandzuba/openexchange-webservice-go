@@ -33,4 +33,4 @@ deploy:
 
 stages:
   - name: deploy
-    if: tag IS present
+    if: branch = master
