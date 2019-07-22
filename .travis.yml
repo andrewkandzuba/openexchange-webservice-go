@@ -3,7 +3,7 @@ sudo: false
 language: go
 
 env:
-  - GO111MODULE=on
+  - GO111MODULE=off
 
 gobuild_args: "-v"
 go:
