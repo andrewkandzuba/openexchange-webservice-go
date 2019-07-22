@@ -20,32 +20,17 @@ before_install:
   - go get golang.org/x/tools/cmd/cover
   - go get github.com/mattn/goveralls
 
-before_script:
-  - go get -u
+#before_script:
+#  - go get -u
 
 script:
   - go test -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -covermode=atomic ./...
   - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken ${COVERALLS_REPO_TOKEN}
 
-#after_success:
-#  - test -n "$TRAVIS_TAG" && curl -sL https://git.io/goreleaser | bash
-#  - export LAST_GIT_TAG_VERSION=$(git describe --abbrev=0 --tags) && export LAST_GIT_TAG_VERSION=${LAST_GIT_TAG_VERSION:1}
-#  - export GIT_TAG_VERSION=$((LAST_GIT_TAG_VERSION+1))
 deploy:
   provider: script
   script: curl -sL https://git.io/goreleaser | bash
-#before_deploy:
-#  - echo "before_deploy"
-#  - echo TRAVIS_BRANCH=${TRAVIS_BRANCH}
-#  - echo TRAVIS_BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}
-#  - echo GIT_TAG_VERSION=${GIT_TAG_VERSION}
-#deploy:
-#    provider: releases
-#    api_key: "GITHUB OAUTH TOKEN"
-#    file: "FILE TO UPLOAD"
-#    skip_cleanup: true
-#    on:
-#      tags: true
+
 stages:
   - name: deploy
     if: branch = master && tag IS present
