@@ -24,7 +24,7 @@ before_script:
   - go get -u
 
 script:
-  - go test -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -covermode=atomic -coverpkg=all ./...
+  - go test -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -covermode=atomic ./...
   - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken ${COVERALLS_REPO_TOKEN}
 
 #after_success:
