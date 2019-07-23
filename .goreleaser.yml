@@ -1,4 +1,9 @@
 project_name: openexchange-webservice-go
+
+before:
+  hooks:
+    - go mod download
+
 build:
   main: cmd/manager/main.go
   binary: openexchange-webservice-go
