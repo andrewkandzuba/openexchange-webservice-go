@@ -4,6 +4,9 @@ language: go
 
 env:
   - GO111MODULE=on
+before:
+  hooks:
+    - go mod download
 
 gobuild_args: "-v"
 go:
@@ -25,9 +28,8 @@ script:
   - go test -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -covermode=atomic ./...
   - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken ${COVERALLS_REPO_TOKEN}
 
-after_success:
+#after_success:
 #  - test -n "$TRAVIS_TAG" && docker login -u=myuser -p="$DOCKER_PASSWORD"
-  - curl -sL https://git.io/goreleaser | bash /dev/stdin --snapshot
 
 deploy:
   - provider: script
