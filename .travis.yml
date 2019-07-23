@@ -26,6 +26,8 @@ script:
   - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken ${COVERALLS_REPO_TOKEN}
 
 #after_success:
+#  - curl -sL https://git.io/goreleaser | bash /dev/stdin --snapshot --skip-publish
+#after_success:
 #  - test -n "$TRAVIS_TAG" && docker login -u=myuser -p="$DOCKER_PASSWORD"
 
 deploy:
@@ -37,7 +39,7 @@ deploy:
       condition: $TRAVIS_OS_NAME = linux
   - provider: script
     skip_cleanup: true
-    script: bash <(curl -sL https://git.io/goreleaser) --snapshot --skip-publish
+    script: curl -sL https://git.io/goreleaser | bash /dev/stdin --snapshot --skip-publish
     on:
       tags: false
       condition: $TRAVIS_OS_NAME = linux
