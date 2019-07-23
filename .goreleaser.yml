@@ -1,5 +1,9 @@
 project_name: openexchange-webservice-go
 
+before:
+  hooks:
+    - git diff --exit-code
+
 build:
   main: cmd/manager/main.go
   binary: openexchange-webservice-go
