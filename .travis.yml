@@ -3,7 +3,7 @@ sudo: false
 language: go
 
 env:
-  - GO111MODULE=off
+  - GO111MODULE=on
 
 gobuild_args: "-v"
 go:
@@ -16,12 +16,10 @@ notifications:
   email:
     - andrey.kandzuba@gmail.com
 
-before_install:
-  - go get golang.org/x/tools/cmd/cover
-  - go get github.com/mattn/goveralls
-
-before_script:
-  - go get -u
+install:
+  - GOMODULE=off go get golang.org/x/tools/cmd/cover
+  - GOMODULE=off go get github.com/mattn/goveralls
+  - GOMODULE=off go get -u
 
 script:
   - go test -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -covermode=atomic ./...
@@ -37,10 +35,9 @@ deploy:
     on:
       tags: true
       condition: $TRAVIS_OS_NAME = linux
-#deploy:
-#  provider: script
-#  script: curl -sL https://git.io/goreleaser | bash
-#
-#stages:
-#  - name: deploy
-#    if: branch = master
+  - provider: script
+    skip_cleanup: true
+    script: curl -sL https://git.io/goreleaser | bash --snapshot --skip-publish --rm-dist
+    on:
+      tags: false
+      condition: $TRAVIS_OS_NAME = linux
