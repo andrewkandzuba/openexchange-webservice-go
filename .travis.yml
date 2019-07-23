@@ -41,3 +41,7 @@ deploy:
     on:
       type: pull_request
       condition: $TRAVIS_OS_NAME = linux
+
+branches:
+  only:
+    - master
