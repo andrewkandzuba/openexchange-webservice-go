@@ -37,7 +37,7 @@ deploy:
       condition: $TRAVIS_OS_NAME = linux
   - provider: script
     skip_cleanup: true
-    script: bash < (curl -sL https://git.io/goreleaser) --snapshot --skip-publish
+    script: bash <(curl -sL https://git.io/goreleaser) --snapshot --skip-publish
     on:
       tags: false
       condition: $TRAVIS_OS_NAME = linux
