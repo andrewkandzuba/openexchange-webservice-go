@@ -15,9 +15,9 @@ notifications:
 
 install:
   - go mod download
-  - GOMODULE=off go get golang.org/x/tools/cmd/cover
-  - GOMODULE=off go get github.com/mattn/goveralls
-  - GOMODULE=off go get -u
+  - go get golang.org/x/tools/cmd/cover
+  - go get github.com/mattn/goveralls
+  - go get -u
   - git diff --exit-code
 
 script:
