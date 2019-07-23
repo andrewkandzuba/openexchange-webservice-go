@@ -2,7 +2,7 @@ project_name: openexchange-webservice-go
 
 before:
   hooks:
-    - git diff --exit-code
+    - go mod download
 
 build:
   main: cmd/manager/main.go

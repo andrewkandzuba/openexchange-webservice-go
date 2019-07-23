@@ -1,4 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/github/andrewkandzuba/openexchange-webservice-go/badge.svg?branch=master)](https://coveralls.io/github/andrewkandzuba/openexchange-webservice-go?branch=master)
+[![Build Status](https://travis-ci.com/andrewkandzuba/openexchange-webservice-go.svg?branch=master)](https://travis-ci.com/andrewkandzuba/openexchange-webservice-go) [![Coverage Status](https://coveralls.io/repos/github/andrewkandzuba/openexchange-webservice-go/badge.svg?branch=master)](https://coveralls.io/github/andrewkandzuba/openexchange-webservice-go?branch=master)
 
 # Introduction 
 
