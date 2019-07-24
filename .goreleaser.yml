@@ -2,7 +2,6 @@ project_name: openexchange-webservice-go
 
 before:
   hooks:
-   # - GO111MODULE=off go mod download
     - git diff --exit-code
 
 build:
@@ -18,14 +17,12 @@ archive:
   format: tar.gz
 
 dockers:
-  -
+  - image_templates:
+      - "{{.Env.DOCKER_USER}}/{{.ProjectName}}:latest"
+      - "{{.Env.DOCKER_USER}}/{{.ProjectName}}:{{ .Tag }}"
     goos: linux
     goarch: amd64
     goarm: ''
     binaries:
-      - mybinary
-    # Templates of the Docker image names.
-    image_templates:
-      - "{{.Env.DOCKER_USER}}/{{.ProjectName}}:latest"
-      - "{{.Env.DOCKER_USER}}/{{.ProjectName}}:{{ .Tag }}"
+    - {{.ProjectName}}
     dockerfile: Dockerfile
