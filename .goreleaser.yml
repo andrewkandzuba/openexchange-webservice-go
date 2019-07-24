@@ -5,6 +5,8 @@ before:
     - git diff --exit-code
 
 build:
+  env:
+    - CGO_ENABLED=0
   main: cmd/manager/main.go
   binary: openexchange-webservice-go
   goos:
@@ -17,12 +19,11 @@ archive:
   format: tar.gz
 
 dockers:
-  - image_templates:
-      - "{{.Env.DOCKER_USER}}/{{.ProjectName}}:latest"
-      - "{{.Env.DOCKER_USER}}/{{.ProjectName}}:{{ .Tag }}"
+  -
+    binaries:
+      - openexchange-webservice-go
     goos: linux
     goarch: amd64
-    goarm: ''
-    binaries:
-    - {{.ProjectName}}
-    dockerfile: Dockerfile
+    image_templates:
+      - "{{.Env.DOCKER_USER}}/{{.ProjectName}}:latest"
+      - "{{.Env.DOCKER_USER}}/{{.ProjectName}}:{{ .Tag }}"
