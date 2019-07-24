@@ -13,10 +13,10 @@ notifications:
   email:
     - andrey.kandzuba@gmail.com
 
-install:
-  - go get golang.org/x/tools/cmd/cover
-  - go get github.com/mattn/goveralls
-  - go get -u
+#install:
+#  - go get golang.org/x/tools/cmd/cover
+#  - go get github.com/mattn/goveralls
+#  - go get -u
 
 script:
   - go test -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -covermode=atomic ./...
