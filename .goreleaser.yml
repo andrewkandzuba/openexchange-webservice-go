@@ -2,9 +2,11 @@ project_name: openexchange-webservice-go
 
 before:
   hooks:
-    - go mod download
+    - git diff --exit-code
 
 build:
+  env:
+    - CGO_ENABLED=0
   main: cmd/manager/main.go
   binary: openexchange-webservice-go
   goos:
@@ -15,3 +17,13 @@ build:
     - amd64
 archive:
   format: tar.gz
+
+dockers:
+  -
+    binaries:
+      - openexchange-webservice-go
+    goos: linux
+    goarch: amd64
+    image_templates:
+      - "{{.Env.DOCKER_USER}}/{{.ProjectName}}:latest"
+      - "{{.Env.DOCKER_USER}}/{{.ProjectName}}:{{ .Tag }}"

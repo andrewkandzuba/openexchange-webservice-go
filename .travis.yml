@@ -14,17 +14,15 @@ notifications:
     - andrey.kandzuba@gmail.com
 
 install:
-  - go get golang.org/x/tools/cmd/cover
-  - go get github.com/mattn/goveralls
-  - go get -u
-  - git diff --exit-code
+  - GO111MODULE=off go get golang.org/x/tools/cmd/cover
+  - GO111MODULE=off go get github.com/mattn/goveralls
 
 script:
   - go test -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -covermode=atomic ./...
   - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken ${COVERALLS_REPO_TOKEN}
 
-#after_success:
-#  - test -n "$TRAVIS_TAG" && docker login -u=myuser -p="$DOCKER_PASSWORD"
+after_success:
+  - test -n "$TRAVIS_TAG" && docker login -u="$DOCKER_USER" -p="$DOCKER_PASSWORD"
 
 deploy:
   - provider: script
