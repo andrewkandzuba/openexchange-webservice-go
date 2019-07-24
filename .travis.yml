@@ -14,9 +14,8 @@ notifications:
     - andrey.kandzuba@gmail.com
 
 install:
-  - go get golang.org/x/tools/cmd/cover
-  - go get github.com/mattn/goveralls
-#  - go get -u
+  - GOMODULES=off go get golang.org/x/tools/cmd/cover
+  - GOMODULES=off go get github.com/mattn/goveralls
 
 script:
   - go test -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -covermode=atomic ./...
