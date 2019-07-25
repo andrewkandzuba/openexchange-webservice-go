@@ -1,48 +1,43 @@
 sudo: false
-
 env:
   global:
   - CLOUDSDK_CORE_DISABLE_PROMPTS=1
   - GO111MODULE=on
-
 cache:
   directories:
-    - $HOME/google-cloud-sdk
-
+  - "$HOME/google-cloud-sdk"
 notifications:
   email:
-    - andrey.kandzuba@gmail.com
-
+  - andrey.kandzuba@gmail.com
 language: go
-
 gobuild_args: "-v"
 go:
-  - 1.12.x
-
+- 1.12.x
 before_install:
-  - if [ ! -d $HOME/google-cloud-sdk/bin ]; then
-    rm -rf $HOME/google-cloud-sdk;
-    curl https://sdk.cloud.google.com | bash > /dev/null;
-    fi
-  - source $HOME/google-cloud-sdk/path.bash.inc
-  - gcloud components update kubectl
-  - gcloud version
-
+- openssl aes-256-cbc -K $encrypted_ba6ca5c4fdd9_key -iv $encrypted_ba6ca5c4fdd9_iv
+  -in travis-ci.json.enc -out travis-ci.json -d
+- openssl aes-256-cbc -K ${encrypted_ba6ca5c4fdd9_key} -iv ${encrypted_ba6ca5c4fdd9_iv}
+  -in travis-ci.json.enc -out travis-ci.json -d
+- if [ ! -d $HOME/google-cloud-sdk/bin ]; then rm -rf $HOME/google-cloud-sdk; curl
+  https://sdk.cloud.google.com | bash > /dev/null; fi
+- source $HOME/google-cloud-sdk/path.bash.inc
+- gcloud components update kubectl
+- gcloud version
+- gcloud auth activate-service-account --key-file=travis-ci.json
+- gcloud config set project gi-gae
 install:
-  - GO111MODULE=off go get golang.org/x/tools/cmd/cover
-  - GO111MODULE=off go get github.com/mattn/goveralls
-
+- GO111MODULE=off go get golang.org/x/tools/cmd/cover
+- GO111MODULE=off go get github.com/mattn/goveralls
 script:
-  - go test -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -covermode=atomic ./...
-  - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken ${COVERALLS_REPO_TOKEN}
-
+- go test -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -covermode=atomic ./...
+- "${HOME}/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken
+  ${COVERALLS_REPO_TOKEN}"
 after_success:
-  - test -n "$TRAVIS_TAG" && docker login -u="$DOCKER_USER" -p="$DOCKER_PASSWORD"
-
+- test -n "$TRAVIS_TAG" && docker login -u="$DOCKER_USER" -p="$DOCKER_PASSWORD"
 deploy:
-  - provider: script
-    skip_cleanup: true
-    script: curl -sL https://git.io/goreleaser | bash
-    on:
-      tags: true
-      condition: $TRAVIS_OS_NAME = linux
+- provider: script
+  skip_cleanup: true
+  script: curl -sL https://git.io/goreleaser | bash
+  on:
+    tags: true
+    condition: "$TRAVIS_OS_NAME = linux"
