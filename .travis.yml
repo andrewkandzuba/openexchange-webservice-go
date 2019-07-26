@@ -14,9 +14,7 @@ gobuild_args: "-v"
 go:
 - 1.12.x
 before_install:
-- openssl aes-256-cbc -K $encrypted_ba6ca5c4fdd9_key -iv $encrypted_ba6ca5c4fdd9_iv
-  -in travis-ci.json.enc -out travis-ci.json -d
-- openssl aes-256-cbc -K ${encrypted_ba6ca5c4fdd9_key} -iv ${encrypted_ba6ca5c4fdd9_iv}
+- openssl aes-256-cbc -K $encrypted_603ef1bd57a5_key -iv $encrypted_603ef1bd57a5_iv
   -in travis-ci.json.enc -out travis-ci.json -d
 - if [ ! -d $HOME/google-cloud-sdk/bin ]; then rm -rf $HOME/google-cloud-sdk; curl
   https://sdk.cloud.google.com | bash > /dev/null; fi
