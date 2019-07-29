@@ -37,7 +37,7 @@ deploy:
     condition: "$TRAVIS_OS_NAME = linux"
 - provider: script
   skip_cleanup: true
-  script: ${TRAVIS_BUILD_DIR}/build/deploy.sh
+  script: deploy.sh
   on:
     tags: true
     condition: "$TRAVIS_OS_NAME = linux"
