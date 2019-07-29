@@ -22,7 +22,7 @@ before_install:
 - gcloud components update kubectl
 - gcloud version
 - gcloud auth activate-service-account --key-file=travis-ci.json
-- gcloud config set project gi-gae
+- gcloud config set project ${GKE_PROJECT}
 install:
 - GO111MODULE=off go get golang.org/x/tools/cmd/cover
 - GO111MODULE=off go get github.com/mattn/goveralls
@@ -36,6 +36,12 @@ deploy:
 - provider: script
   skip_cleanup: true
   script: curl -sL https://git.io/goreleaser | bash
+  on:
+    tags: true
+    condition: "$TRAVIS_OS_NAME = linux"
+- provider: script
+  skip_cleanup: true
+  script: sed -e "s|REPLACE_IMAGE|${TRAVIS_REPO_SLUG}:${TRAVIS_TAG}|g" ${TRAVIS_BUILD_DIR}/build/deployment.yaml | kubectl apply -f -
   on:
     tags: true
     condition: "$TRAVIS_OS_NAME = linux"
