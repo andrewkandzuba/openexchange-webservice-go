@@ -1,33 +1,6 @@
 #!/usr/bin/env bash
 
-set +x
-
-read -r -d '' USAGE << EOM
-Build and deploy to Kubernetes cluster
-
-Usage: kubernetes <docker-image-name>
-
-Basic commands:
-    docker-image-name - the name of the docker image in the local Docker registry.
-
-Use "kubernetes --help" for more information about this script.
-EOM
-
-if [[ "$1" == "" ]]; then
-    echo ${USAGE}
-    exit 1
-elif [[ $1 == "--help" ]]; then
-    echo ${USAGE}
-    exit 1
-fi
-
-DOCKER_IMAGE_NAME="$1"
-
-echo "Deploying to Kubernetes ..."
-
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-
-${SCRIPTPATH}/make.sh && \
-${SCRIPTPATH}/docker_build.sh && \
-sed -e "s|REPLACE_IMAGE|${DOCKER_IMAGE_NAME}|g" $SCRIPTPATH/docker_push.sh | sh && \
-sed -e "s|REPLACE_IMAGE|${DOCKER_IMAGE_NAME}|g" $SCRIPTPATH/deployment.yaml | kubectl apply -f -
+openssl aes-256-cbc -K ${encrypted_603ef1bd57a5_key} -iv ${encrypted_603ef1bd57a5_iv} -in travis-ci.json.enc -out ${TRAVIS_BUILD_DIR}/dist/travis-ci.json -d && \
+gcloud auth activate-service-account --key-file=${TRAVIS_BUILD_DIR}/dist/travis-ci.json && \
+gcloud config set project ${GKE_PROJECT} && \
+sed -e "s|REPLACE_IMAGE|${TRAVIS_REPO_SLUG}:${TRAVIS_TAG}|g" ${TRAVIS_BUILD_DIR}/build/deployment.yaml | kubectl apply -f -
