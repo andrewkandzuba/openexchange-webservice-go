@@ -1,33 +1,42 @@
 sudo: false
-
-language: go
-
 env:
-  - GO111MODULE=on
-
-gobuild_args: "-v"
-go:
-  - 1.12.x
-
+  global:
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+    - GO111MODULE=on
+cache:
+  directories:
+    - "$HOME/google-cloud-sdk"
 notifications:
   email:
     - andrey.kandzuba@gmail.com
-
+language: go
+gobuild_args: "-v"
+go:
+  - 1.12.x
+before_install:
+  - if [ ! -d $HOME/google-cloud-sdk/bin ]; then rm -rf $HOME/google-cloud-sdk; rm -rf $HOME/.config/gcloud; curl
+    https://sdk.cloud.google.com | bash > /dev/null; fi
+  - source $HOME/google-cloud-sdk/path.bash.inc
+  - gcloud components update kubectl
+  - gcloud version
 install:
   - GO111MODULE=off go get golang.org/x/tools/cmd/cover
   - GO111MODULE=off go get github.com/mattn/goveralls
-
 script:
   - go test -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -covermode=atomic ./...
-  - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken ${COVERALLS_REPO_TOKEN}
-
+  - ${HOME}/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken ${COVERALLS_REPO_TOKEN}
 after_success:
   - test -n "$TRAVIS_TAG" && docker login -u="$DOCKER_USER" -p="$DOCKER_PASSWORD"
-
 deploy:
   - provider: script
     skip_cleanup: true
     script: curl -sL https://git.io/goreleaser | bash
     on:
       tags: true
-      condition: $TRAVIS_OS_NAME = linux
+      condition: "$TRAVIS_OS_NAME = linux"
+  - provider: script
+    skip_cleanup: true
+    script: ${TRAVIS_BUILD_DIR}/deploy.sh
+    on:
+      tags: true
+      condition: "$TRAVIS_OS_NAME = linux"
