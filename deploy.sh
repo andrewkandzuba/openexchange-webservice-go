@@ -7,6 +7,6 @@ rm -rf travis-ci.json && \
 gcloud config set project ${GKE_PROJECT} && \
 gcloud config set compute/zone ${GKE_ZONE} && \
 gcloud container clusters get-credentials ${GKE_CLUSTER} && \
-kubectl apply -f ${TRAVIS_BUILD_DIR}/namespace.yaml && \
-kubectl config set-context "$(kubectl config current-context)" --namespace=edu && \
+sed -e "s|GKE_NAMESPACE|$GKE_NAMESPACE|g" ${TRAVIS_BUILD_DIR}/namespace.yaml | kubectl apply -f -
+kubectl config set-context "$(kubectl config current-context)" --namespace=$GKE_NAMESPACE && \
 sed -e "s|REPLACE_IMAGE|$FULL_DOCKER_IMAGE|g" ${TRAVIS_BUILD_DIR}/deployment.yaml | kubectl apply -f -
