@@ -13,4 +13,4 @@ then
     curl -sL https://git.io/goreleaser | bash
 fi
 
-echo "Skept as release has already existed"
+echo "Release ${TRAVIS_TAG} is already existed"
