@@ -1,0 +1,35 @@
+steps:
+  # install cover
+  - name: 'gcr.io/cloud-builders/go'
+    env:
+      - GO111MODULE=on
+    args: ['get', 'golang.org/x/tools/cmd/cover']
+    volumes:
+      - name: go-modules
+        path: /go
+  # install goveralls
+  - name: 'gcr.io/cloud-builders/go'
+    env:
+      - GO111MODULE=on
+    args: ['get', 'github.com/mattn/goveralls']
+    volumes:
+      - name: go-modules
+        path: /go
+  # run unit tests
+  - name: 'gcr.io/cloud-builders/go'
+    args: ['test', '-coverprofile=${TAG_NAME}/coverage.out', '-covermode=atomic', './...']
+    env:
+      - GO111MODULE=on
+    volumes:
+      - name: go-modules
+        path: /go
+  # report to coverall.io
+  - name: 'ubuntu'
+    args: ['/go/bin/goveralls', '-coverprofile=coverage.out', '-service=google-cloud-builds', '-covermode=atomic', '-repotoken', '${_COVERALLS_REPO_TOKEN}']
+    env:
+      - GO111MODULE=on
+    volumes:
+      - name: go-modules
+        path: /go
+#images:
+#  - 'gcr.io/$PROJECT_ID/openexchange-webservice-go:${TAG_NAME}'

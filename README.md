@@ -88,6 +88,7 @@ Following environment variables are mandatory for any successful build:
 - **GKE_ZONE** - the name of the target GCP cluster zone.
 - **GKE_CLUSTER** - the name of the target GCP cluster. Note that the cluster must be precreated. See "_1.2. Deploy to Google Kubernetes Engine (GKE)_"
 - **GKE_NAMESPACE** - the target Kubernetes namespace. 
+- **NOTIFY_EMAIL** - send build status to.
 
 ### 2.3. Tagging
 
