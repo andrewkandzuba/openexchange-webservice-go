@@ -8,7 +8,7 @@ cache:
     - "$HOME/google-cloud-sdk"
 notifications:
   email:
-    - andrey.kandzuba@gmail.com
+    - ${NOTIFY_EMAIL}
 language: go
 gobuild_args: "-v"
 go:
