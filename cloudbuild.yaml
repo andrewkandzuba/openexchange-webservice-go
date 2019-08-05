@@ -22,5 +22,5 @@ options:
   volumes:
     - name: go-modules
       path: /go
-#images:
-#  - 'gcr.io/$PROJECT_ID/openexchange-webservice-go:${TAG_NAME}'
+images:
+  - 'gcr.io/${PROJECT_ID}/openexchange-webservice-go:${BRANCH_NAME}'
