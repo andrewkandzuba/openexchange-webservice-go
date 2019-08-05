@@ -2,40 +2,25 @@ steps:
   - name: 'gcr.io/cloud-builders/go'
     env:
       - GO111MODULE=off
-      - GOPATH=/go
     args: ['get', 'golang.org/x/tools/cmd/cover']
-    volumes:
-      - name: go-modules
-        path: /go
   - name: 'gcr.io/cloud-builders/go'
     env:
       - GO111MODULE=off
-      - GOPATH=/go
     args: ['get', 'github.com/mattn/goveralls']
-    volumes:
-      - name: go-modules
-        path: /go
-#  - name: 'ubuntu'
-#    args: ['chmod', '-x', '/go/bin/goveralls']
-#    volumes:
-#      - name: go-modules
-#        path: /go
   - name: 'gcr.io/cloud-builders/go'
     args: ['test', '-coverprofile=coverage.out', '-covermode=atomic', './...']
     env:
       - GO111MODULE=on
-      - GOPATH=/go
-    volumes:
-      - name: go-modules
-        path: /go
   - name: 'gcr.io/cloud-builders/go'
     entrypoint: '/go/bin/goveralls'
     args: ['-coverprofile=coverage.out', '-service=travis-ci', '-covermode=atomic', '-repotoken', '${_COVERALLS_REPO_TOKEN}']
     env:
       - GO111MODULE=on
-      - GOPATH=/go
-    volumes:
-      - name: go-modules
-        path: /go
+options:
+  env:
+    - GOPATH=/go
+  volumes:
+    - name: go-modules
+      path: /go
 #images:
 #  - 'gcr.io/$PROJECT_ID/openexchange-webservice-go:${TAG_NAME}'
