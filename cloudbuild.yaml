@@ -2,7 +2,8 @@ steps:
   # install cover
   - name: 'gcr.io/cloud-builders/go'
     env:
-      - GO111MODULE=on
+      - GO111MODULE=off
+      - GOPATH=/go
     args: ['get', 'golang.org/x/tools/cmd/cover']
     volumes:
       - name: go-modules
@@ -10,7 +11,8 @@ steps:
   # install goveralls
   - name: 'gcr.io/cloud-builders/go'
     env:
-      - GO111MODULE=on
+      - GO111MODULE=off
+      - GOPATH=/go
     args: ['get', 'github.com/mattn/goveralls']
     volumes:
       - name: go-modules
@@ -20,6 +22,7 @@ steps:
     args: ['test', '-coverprofile=${TAG_NAME}/coverage.out', '-covermode=atomic', './...']
     env:
       - GO111MODULE=on
+      - GOPATH=/go
     volumes:
       - name: go-modules
         path: /go
@@ -28,6 +31,7 @@ steps:
     args: ['/go/bin/goveralls', '-coverprofile=coverage.out', '-service=google-cloud-builds', '-covermode=atomic', '-repotoken', '${_COVERALLS_REPO_TOKEN}']
     env:
       - GO111MODULE=on
+      - GOPATH=/go
     volumes:
       - name: go-modules
         path: /go
