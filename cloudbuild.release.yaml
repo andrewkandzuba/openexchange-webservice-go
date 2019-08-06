@@ -14,13 +14,13 @@ steps:
     args: ['-coverprofile=coverage.out', '-service=travis-ci']
     secretEnv: ['COVERALLS_TOKEN']
   - name: 'gcr.io/cloud-builders/go'
-    env: ['PROJECT_ROOT=github.com/${GITHUB_USER}/{GITHUB_REPO}']
+    env: ['PROJECT_ROOT=github.com/andrewkandzuba/openexchange-webservice-go']
     args: ['env']
   - name: goreleaser/goreleaser
     entrypoint: /bin/sh
     dir: gopath/src/github.com
     env: ['GOPATH=/workspace/gopath']
-    args: ['-c', 'cd ${GITHUB_USER}/${}GITHUB_REPO && git tag $TAG_NAME && /goreleaser' ]
+    args: ['-c', 'cd andrewkandzuba/openexchange-webservice-go && git tag $TAG_NAME && /goreleaser' ]
     secretEnv: ['GITHUB_TOKEN']
 secrets:
   - kmsKeyName: projects/gi-gae/locations/global/keyRings/openexchange-webservice-go/cryptoKeys/coveralls_token
@@ -28,6 +28,8 @@ secrets:
       COVERALLS_TOKEN: |
         CiQAnCXeaYjhNLCBn7V3WAIEFwLq9BSvMcsN9Ld2V+sKykzGEL4SSgBQL80OofuuIdnEBoeDezpp
         PbA8B4JisQGLtbRtuKjKVZaca6xNJny172kKh2AexflO7Ao6ybLhQOHG+EgElrRqqkQ25KPCDVbH
+  - kmsKeyName: projects/gi-gae/locations/global/keyRings/openexchange-webservice-go/cryptoKeys/github_token
+    secretEnv:
       GITHUB_TOKEN: |
         CiQA3Q85jt+QK87EP3qbR/R3LGLKKo8gbKyMBqm7tWjl6hhtcGsSUQA16XTodsTJtNpSNhbU8QTF
         5tGHqRowXuPISBTnvl3JYSIbgf4xyK2f9n8m0R/GCurQQjaQ9Mf5kHRIFvn54GbC+qtRsxfXEP7i
@@ -36,8 +38,6 @@ options:
   env:
     - GOPATH=/go
     - GO111MODULE=on
-    - GITHUB_USER=andrewkandzuba
-    - GITHUB_REPO=openexchange-webservice-go
   #    - REPO_SLUG='$(echo $REPO_NAME | sed -e "s|_|/|g" | sed -e "s|github/||g")'
   #    - GITHUB_NAME='$(echo $REPO_SLUG | sed -e "s|/| |g" | awk \{'print $1'\})'
   #    - GITHUB_REPO='$(echo $REPO_SLUG | sed -e "s|/| |g" | awk \{'print $2'\})'
@@ -45,4 +45,4 @@ options:
     - name: go-modules
       path: /go
 images:
-  - 'gcr.io/${PROJECT_ID}/${GITHUB_REPO}:${TAG_NAME}'
+  - 'gcr.io/${PROJECT_ID}/openexchange-webservice-go:${TAG_NAME}'
