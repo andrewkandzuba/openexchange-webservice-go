@@ -1,4 +1,4 @@
-project_name: ${GITHUB_PROJECT}
+project_name: ${GITHUB_REPO}
 
 release:
   github:

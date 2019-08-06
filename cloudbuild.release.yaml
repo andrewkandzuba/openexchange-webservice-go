@@ -9,30 +9,40 @@ steps:
     args: ['get', 'github.com/mattn/goveralls']
   - name: 'gcr.io/cloud-builders/go'
     args: ['test', '-coverprofile=coverage.out', '-covermode=atomic', './...']
-    env:
-      - GO111MODULE=on
   - name: 'gcr.io/cloud-builders/go'
     entrypoint: '/go/bin/goveralls'
-    args: ['-coverprofile=coverage.out', '-service=travis-ci', '-covermode=atomic', '-repotoken', '${_COVERALLS_REPO_TOKEN}']
-    env:
-      - GO111MODULE=on
-  - name: gcr.io/cloud-builders/go
-    env: ['PROJECT_ROOT=github.com/YourGithubUser/YourGithubRepo']
+    args: ['-coverprofile=coverage.out', '-service=travis-ci']
+    secretEnv: ['COVERALLS_TOKEN']
+  - name: 'gcr.io/cloud-builders/go'
+    env: ['PROJECT_ROOT=github.com/${GITHUB_USER}/{GITHUB_REPO}']
     args: ['env']
   - name: goreleaser/goreleaser
     entrypoint: /bin/sh
     dir: gopath/src/github.com
-    args: ['-c', 'cd YourGithubUser/YourGithubRepo && git tag $TAG_NAME && /goreleaser' ]
+    env: ['GOPATH=/workspace/gopath']
+    args: ['-c', 'cd ${GITHUB_USER}/${}GITHUB_REPO && git tag $TAG_NAME && /goreleaser' ]
     secretEnv: ['GITHUB_TOKEN']
+secrets:
+  - kmsKeyName: projects/gi-gae/locations/global/keyRings/openexchange-webservice-go/cryptoKeys/coveralls_token
+    secretEnv:
+      COVERALLS_TOKEN: |
+        CiQAnCXeaYjhNLCBn7V3WAIEFwLq9BSvMcsN9Ld2V+sKykzGEL4SSgBQL80OofuuIdnEBoeDezpp
+        PbA8B4JisQGLtbRtuKjKVZaca6xNJny172kKh2AexflO7Ao6ybLhQOHG+EgElrRqqkQ25KPCDVbH
+      GITHUB_TOKEN: |
+        CiQA3Q85jt+QK87EP3qbR/R3LGLKKo8gbKyMBqm7tWjl6hhtcGsSUQA16XTodsTJtNpSNhbU8QTF
+        5tGHqRowXuPISBTnvl3JYSIbgf4xyK2f9n8m0R/GCurQQjaQ9Mf5kHRIFvn54GbC+qtRsxfXEP7i
+        1Vsd1SHZIg==
 options:
   env:
     - GOPATH=/go
-    - GITHUB_TOKEN=${_GITHUB_TOKEN}
+    - GO111MODULE=on
+    - GITHUB_USER=andrewkandzuba
+    - GITHUB_REPO=openexchange-webservice-go
   #    - REPO_SLUG='$(echo $REPO_NAME | sed -e "s|_|/|g" | sed -e "s|github/||g")'
   #    - GITHUB_NAME='$(echo $REPO_SLUG | sed -e "s|/| |g" | awk \{'print $1'\})'
-  #    - GITHUB_PROJECT='$(echo $REPO_SLUG | sed -e "s|/| |g" | awk \{'print $2'\})'
+  #    - GITHUB_REPO='$(echo $REPO_SLUG | sed -e "s|/| |g" | awk \{'print $2'\})'
   volumes:
     - name: go-modules
-      path: /gopath
+      path: /go
 images:
-  - 'gcr.io/${PROJECT_ID}/openexchange-webservice-go:${TAG_NAME}'
+  - 'gcr.io/${PROJECT_ID}/${GITHUB_REPO}:${TAG_NAME}'
