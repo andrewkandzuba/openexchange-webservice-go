@@ -3,6 +3,8 @@ env:
   global:
     - CLOUDSDK_CORE_DISABLE_PROMPTS=1
     - GO111MODULE=on
+    - REPO_SLUG=${TRAVIS_REPO_SLUG}
+    - TAG_NAME=${TRAVIS_TAG}
 cache:
   directories:
     - "$HOME/google-cloud-sdk"

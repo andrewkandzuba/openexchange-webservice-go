@@ -17,8 +17,11 @@ steps:
     env:
       - GO111MODULE=on
 #  @ToDo: Replace with GoReleaser call.
-#  - name: 'gcr.io/cloud-builders/docker'
-#    args: ['build', '-t', 'gcr.io/${PROJECT_ID}/openexchange-webservice-go:${BRANCH_NAME}', '.']
+  - name: 'gcr.io/cloud-builders/curl'
+    entrypoint: 'bash'
+    args: ['./release.sh']
+    env:
+      - REPO_SLUG='${REPO_NAME}/${PROJECT_ID}'
 options:
   env:
     - GOPATH=/go
