@@ -1,9 +1,9 @@
-project_name: ${GITHUB_REPO}
+project_name: openexchange-webservice-go
 
 release:
   github:
-    owner: ${GITHUB_USER}
-    name: '{{.ProjectName}}'
+    owner: andrewkandzuba
+    name: openexchange-webservice-go
 
 before:
   hooks:
