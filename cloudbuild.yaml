@@ -16,15 +16,17 @@ steps:
     args: ['-coverprofile=coverage.out', '-service=travis-ci', '-covermode=atomic', '-repotoken', '${_COVERALLS_REPO_TOKEN}']
     env:
       - GO111MODULE=on
-#  @ToDo: Replace with GoReleaser call.
   - name: 'gcr.io/cloud-builders/curl'
     entrypoint: 'bash'
     args: ['./release.sh']
     env:
       - REPO_SLUG='${REPO_NAME}/${PROJECT_ID}'
+      # temporal solution
+      - TAG_NAME=${BRANCH_NAME}
 options:
   env:
     - GOPATH=/go
+    - GITHUB_TOKEN=${_GITHUB_TOKEN}
   volumes:
     - name: go-modules
       path: /go
