@@ -28,8 +28,15 @@ script:
   - go test -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -covermode=atomic ./...
   - ${HOME}/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken ${COVERALLS_REPO_TOKEN}
 after_success:
-  - test -n "$TRAVIS_TAG" && docker login -u="$DOCKER_USER" -p="$DOCKER_PASSWORD"
+  - export GITHUB_USER=$(echo $REPO_SLUG | sed -e "s|/| |g" | awk \{'print $1'\})
+  - export GITHUB_PROJECT=$(echo $REPO_SLUG | sed -e "s|/| |g" | awk \{'print $2'\})
 deploy:
+  - provider: script
+    skip_cleanup: true
+    script: docker login -u="$DOCKER_USER" -p="$DOCKER_PASSWORD"
+    on:
+      tags: true
+      condition: "$TRAVIS_OS_NAME = linux"
   - provider: script
     skip_cleanup: true
     script: ${TRAVIS_BUILD_DIR}/release.sh

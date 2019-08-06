@@ -16,12 +16,20 @@ steps:
     args: ['-coverprofile=coverage.out', '-service=travis-ci', '-covermode=atomic', '-repotoken', '${_COVERALLS_REPO_TOKEN}']
     env:
       - GO111MODULE=on
+  - name: gcr.io/cloud-builders/go
+    env: ['PROJECT_ROOT=github.com/YourGithubUser/YourGithubRepo']
+    args: ['env']
+  - name: goreleaser/goreleaser
+    entrypoint: /bin/sh
+    dir: gopath/src/github.com
+    args: ['-c', 'cd YourGithubUser/YourGithubRepo && git tag $TAG_NAME && /goreleaser' ]
+    secretEnv: ['GITHUB_TOKEN']
 options:
   env:
     - GOPATH=/go
-#    - REPO_SLUG='$(echo $REPO_NAME | sed -e "s|_|/|g" | sed -e "s|github/||g")'
-#    - GITHUB_NAME='$(echo $REPO_SLUG | sed -e "s|/| |g" | awk \{'print $1'\})'
-#    - GITHUB_PROJECT='$(echo $REPO_SLUG | sed -e "s|/| |g" | awk \{'print $2'\})'
+    - GITHUB_TOKEN=${_GITHUB_TOKEN}
   volumes:
     - name: go-modules
-      path: /go
+      path: /gopath
+images:
+  - 'gcr.io/${PROJECT_ID}/openexchange-webservice-go:${TAG_NAME}'

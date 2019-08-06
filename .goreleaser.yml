@@ -1,4 +1,9 @@
-project_name: openexchange-webservice-go
+project_name: ${GITHUB_PROJECT}
+
+release:
+  github:
+    owner: ${GITHUB_USER}
+    name: '{{.ProjectName}}'
 
 before:
   hooks:
@@ -8,7 +13,7 @@ build:
   env:
     - CGO_ENABLED=0
   main: cmd/manager/main.go
-  binary: openexchange-webservice-go
+  binary: '{{.ProjectName}}'
   goos:
     - windows
     - darwin
@@ -21,7 +26,7 @@ archive:
 dockers:
   -
     binaries:
-      - openexchange-webservice-go
+      - '{{.ProjectName}}'
     goos: linux
     goarch: amd64
     image_templates:
