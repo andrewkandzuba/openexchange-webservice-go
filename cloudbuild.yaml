@@ -9,16 +9,13 @@ steps:
     args: ['get', 'github.com/mattn/goveralls']
   - name: 'gcr.io/cloud-builders/go'
     args: ['test', '-coverprofile=coverage.out', '-covermode=atomic', './...']
-    env:
-      - GO111MODULE=on
   - name: 'gcr.io/cloud-builders/go'
     entrypoint: '/go/bin/goveralls'
     args: ['-coverprofile=coverage.out', '-service=travis-ci', '-covermode=atomic', '-repotoken', '${_COVERALLS_REPO_TOKEN}']
-    env:
-      - GO111MODULE=on
 options:
   env:
     - GOPATH=/go
+    - GO111MODULE=on
 #    - REPO_SLUG='$(echo $REPO_NAME | sed -e "s|_|/|g" | sed -e "s|github/||g")'
 #    - GITHUB_NAME='$(echo $REPO_SLUG | sed -e "s|/| |g" | awk \{'print $1'\})'
 #    - GITHUB_PROJECT='$(echo $REPO_SLUG | sed -e "s|/| |g" | awk \{'print $2'\})'
