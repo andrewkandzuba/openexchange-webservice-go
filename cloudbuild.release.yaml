@@ -28,6 +28,9 @@ options:
   env:
     - GOPATH=/go
     - GITHUB_TOKEN=${_GITHUB_TOKEN}
+  #    - REPO_SLUG='$(echo $REPO_NAME | sed -e "s|_|/|g" | sed -e "s|github/||g")'
+  #    - GITHUB_NAME='$(echo $REPO_SLUG | sed -e "s|/| |g" | awk \{'print $1'\})'
+  #    - GITHUB_PROJECT='$(echo $REPO_SLUG | sed -e "s|/| |g" | awk \{'print $2'\})'
   volumes:
     - name: go-modules
       path: /gopath
