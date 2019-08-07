@@ -13,16 +13,37 @@ steps:
     entrypoint: '/go/bin/goveralls'
     args: ['-coverprofile=coverage.out', '-service=travis-ci']
     secretEnv: ['COVERALLS_TOKEN']
+  - name: "ubuntu"
+    args: ['ls', '-las', '/']
+  - name: "ubuntu"
+    args: ['pwd']
+  - name: "ubuntu"
+    args: ['ls', '-las', '.']
+  - name: 'gcr.io/cloud-builders/go'
+    env: ['PROJECT_ROOT=github.com/andrewkandzuba/openexchange-webservice-go']
+    args: ['env']
+  - name: goreleaser/goreleaser
+    entrypoint: /bin/sh
+#    dir: go/src/github.com
+    args: ['-c', 'ls -las && git tag v0.0.8 && goreleaser']
+    secretEnv: ['GITHUB_TOKEN']
 secrets:
   - kmsKeyName: projects/gi-gae/locations/global/keyRings/openexchange-webservice-go/cryptoKeys/coveralls_token
     secretEnv:
       COVERALLS_TOKEN: |
         CiQAnCXeaYjhNLCBn7V3WAIEFwLq9BSvMcsN9Ld2V+sKykzGEL4SSgBQL80OofuuIdnEBoeDezpp
         PbA8B4JisQGLtbRtuKjKVZaca6xNJny172kKh2AexflO7Ao6ybLhQOHG+EgElrRqqkQ25KPCDVbH
+  - kmsKeyName: projects/gi-gae/locations/global/keyRings/openexchange-webservice-go/cryptoKeys/github_token
+    secretEnv:
+      GITHUB_TOKEN: |
+        CiQA3Q85jt+QK87EP3qbR/R3LGLKKo8gbKyMBqm7tWjl6hhtcGsSUQA16XTodsTJtNpSNhbU8QTF
+        5tGHqRowXuPISBTnvl3JYSIbgf4xyK2f9n8m0R/GCurQQjaQ9Mf5kHRIFvn54GbC+qtRsxfXEP7i
+        1Vsd1SHZIg==
 options:
   env:
     - GOPATH=/go
     - GO111MODULE=on
+    - DOCKER_USER=${_DOCKER_USER}
   volumes:
     - name: go-modules
       path: /go

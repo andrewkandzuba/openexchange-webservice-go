@@ -18,9 +18,8 @@ steps:
     args: ['env']
   - name: goreleaser/goreleaser
     entrypoint: /bin/sh
-    dir: gopath/src/github.com
-    env: ['GOPATH=/workspace/gopath']
-    args: ['-c', 'cd andrewkandzuba/openexchange-webservice-go && git tag $TAG_NAME && /goreleaser' ]
+    dir: go/src/github.com
+    args: ['-c', 'git tag $TAG_NAME && goreleaser' ]
     secretEnv: ['GITHUB_TOKEN']
 secrets:
   - kmsKeyName: projects/gi-gae/locations/global/keyRings/openexchange-webservice-go/cryptoKeys/coveralls_token
