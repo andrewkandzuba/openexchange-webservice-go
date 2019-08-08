@@ -14,13 +14,16 @@ steps:
     args: ['-coverprofile=coverage.out', '-service=travis-ci']
     secretEnv: ['COVERALLS_TOKEN']
   - name: 'gcr.io/cloud-builders/go'
-    env: ['PROJECT_ROOT=github.com/andrewkandzuba/openexchange-webservice-go']
+    env:
+      - PROJECT_ROOT=github.com/andrewkandzuba/openexchange-webservice-go
     args: ['env']
   - name: goreleaser/goreleaser
     entrypoint: /bin/sh
-    dir: go/src/github.com
-    args: ['-c', 'git tag $TAG_NAME && goreleaser' ]
+    args: ['-c', 'ls -las && git tag v0.0.8 && goreleaser']
     secretEnv: ['GITHUB_TOKEN']
+    env:
+      - DOCKER_REGISTRY=gcr.io
+      - DOCKER_USER=${PROJECT_ID}
 secrets:
   - kmsKeyName: projects/gi-gae/locations/global/keyRings/openexchange-webservice-go/cryptoKeys/coveralls_token
     secretEnv:
@@ -37,9 +40,6 @@ options:
   env:
     - GOPATH=/go
     - GO111MODULE=on
-  #    - REPO_SLUG='$(echo $REPO_NAME | sed -e "s|_|/|g" | sed -e "s|github/||g")'
-  #    - GITHUB_NAME='$(echo $REPO_SLUG | sed -e "s|/| |g" | awk \{'print $1'\})'
-  #    - GITHUB_REPO='$(echo $REPO_SLUG | sed -e "s|/| |g" | awk \{'print $2'\})'
   volumes:
     - name: go-modules
       path: /go

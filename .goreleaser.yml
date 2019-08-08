@@ -30,5 +30,5 @@ dockers:
     goos: linux
     goarch: amd64
     image_templates:
-      - "{{.Env.DOCKER_USER}}/{{.ProjectName}}:latest"
-      - "{{.Env.DOCKER_USER}}/{{.ProjectName}}:{{ .Tag }}"
+      - "{{.Env.DOCKER_REGISTRY}}/{{.Env.DOCKER_USER}}/{{.ProjectName}}:latest"
+      - "{{.Env.DOCKER_REGISTRY}}/{{.Env.DOCKER_USER}}/{{.ProjectName}}:{{ .Tag }}"
