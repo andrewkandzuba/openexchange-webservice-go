@@ -5,6 +5,7 @@ env:
     - GO111MODULE=on
     - REPO_SLUG=${TRAVIS_REPO_SLUG}
     - TAG_NAME=${TRAVIS_TAG}
+    - DOCKER_REGISTRY=docker.io
 cache:
   directories:
     - "$HOME/google-cloud-sdk"
