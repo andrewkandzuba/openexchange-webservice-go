@@ -21,17 +21,9 @@ steps:
     entrypoint: /bin/sh
     args: ['-c', 'ls -las && git tag $TAG_NAME && ./release.sh']
     secretEnv: ['GITHUB_TOKEN']
-    env:
-      - DOCKER_REGISTRY=gcr.io
-      - DOCKER_USER=${PROJECT_ID}
-      - REPO_SLUG=andrewkandzuba/openexchange-webservice-go
   - name: 'gcr.io/cloud-builders/kubectl'
     entrypoint: /bin/sh
-    args: ['sed -e "s|GKE_NAMESPACE|$GKE_NAMESPACE|g" namespace.yaml | kubectl apply -f -']
-    env:
-      - CLOUDSDK_COMPUTE_ZONE=us-central1-b
-      - CLOUDSDK_CONTAINER_CLUSTER=hello-cloudbuild
-      - GKE_NAMESPACE=edu
+    args: ['sed -e "s|KUBECTL_NAMESPACE|$KUBECTL_NAMESPACE|g" namespace.yaml | kubectl apply -f -']
 secrets:
   - kmsKeyName: projects/gi-gae/locations/global/keyRings/openexchange-webservice-go/cryptoKeys/coveralls_token
     secretEnv:
@@ -48,6 +40,13 @@ options:
   env:
     - GOPATH=/go
     - GO111MODULE=on
+    - CLOUDSDK_COMPUTE_ZONE=us-central1-a
+    - CLOUDSDK_CONTAINER_CLUSTER=edu
+    - CLOUDSDK_CORE_PROJECT=gi-gai
+    - KUBECTL_NAMESPACE=edu
+    - DOCKER_REGISTRY=gcr.io
+    - DOCKER_USER=${PROJECT_ID}
+    #- REPO_SLUG=andrewkandzuba/openexchange-webservice-go
   volumes:
     - name: go-modules
       path: /go
