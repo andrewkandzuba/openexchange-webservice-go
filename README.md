@@ -31,7 +31,7 @@ $ gcloud container clusters create edu --machine-type=f1-micro --num-nodes=3 --z
 - Login docker to remote registry like Docker Hub. In my case it is [andrewkandzuba](https://cloud.docker.com/repository/docker/andrewkandzuba)` 
 - Run deployment script ending with the image name in Docker Registry.
 ```bash
-$ sed -e "s|REPLACE_IMAGE|$FULL_DOCKER_IMAGE|g" deployment.yaml | kubectl apply -f -
+$ sed -e "s|$DOCKER_IMAGE|$DOCKER_IMAGE|g" deployment.yaml | kubectl apply -f -
 ```  
 
 #### 1.3. Health check
@@ -84,10 +84,10 @@ Following environment variables are mandatory for any successful build:
     - We use Google Cloud SDK service account authentication method [with key file](https://cloud.google.com/sdk/gcloud/reference/auth/activate-service-account) method to get access to the GKE cluster. 
     - The generated key file should be included into the project but in encrypted form. Travis CI supports [file encryption](https://docs.travis-ci.com/user/encrypting-files/) that greatly facilitates and simplify the solution.
     - Please refer to this example `travis encrypt-file super_secret.txt --add` to understand how the encryption works and how Travis populates these two environment variable.
-- **GKE_PROJECT** - the name of target Google Cloud Project.
-- **GKE_ZONE** - the name of the target GCP cluster zone.
-- **GKE_CLUSTER** - the name of the target GCP cluster. Note that the cluster must be precreated. See "_1.2. Deploy to Google Kubernetes Engine (GKE)_"
-- **GKE_NAMESPACE** - the target Kubernetes namespace. 
+- **CLOUDSDK_CORE_PROJECT** - the name of target Google Cloud Project.
+- **CLOUDSDK_COMPUTE_ZONE** - the name of the target GCP cluster zone.
+- **CLOUDSDK_CONTAINER_CLUSTER** - the name of the target GCP cluster. Note that the cluster must be precreated. See "_1.2. Deploy to Google Kubernetes Engine (GKE)_"
+- **KUBECTL_NAMESPACE** - the target Kubernetes namespace. 
 - **NOTIFY_EMAIL** - send build status to.
 
 ### 2.3. Tagging

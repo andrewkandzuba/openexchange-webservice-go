@@ -1,11 +1,13 @@
 sudo: false
 env:
   global:
-    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
     - GO111MODULE=on
-    - REPO_SLUG=${TRAVIS_REPO_SLUG}
+    - REPO_NAME=${TRAVIS_REPO_SLUG}
     - TAG_NAME=${TRAVIS_TAG}
+    - BUILD_DIR=${TRAVIS_BUILD_DIR}
     - DOCKER_REGISTRY=docker.io
+    - DOCKER_IMAGE="${REPO_NAME}:${TAG_NAME}"
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 cache:
   directories:
     - "$HOME/google-cloud-sdk"
@@ -26,8 +28,8 @@ install:
   - GO111MODULE=off go get golang.org/x/tools/cmd/cover
   - GO111MODULE=off go get github.com/mattn/goveralls
 script:
-  - go test -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -covermode=atomic ./...
-  - ${HOME}/gopath/bin/goveralls -coverprofile=${TRAVIS_BUILD_DIR}/coverage.out -service=travis-ci
+  - go test -coverprofile=${BUILD_DIR}/coverage.out -covermode=atomic ./...
+  - ${HOME}/gopath/bin/goveralls -coverprofile=${BUILD_DIR}/coverage.out -service=travis-ci
 deploy:
   - provider: script
     skip_cleanup: true
@@ -37,13 +39,19 @@ deploy:
       condition: "$TRAVIS_OS_NAME = linux"
   - provider: script
     skip_cleanup: true
-    script: ${TRAVIS_BUILD_DIR}/release.sh
+    script: ${BUILD_DIR}/release.sh
     on:
       tags: true
       condition: "$TRAVIS_OS_NAME = linux"
   - provider: script
     skip_cleanup: true
-    script: ${TRAVIS_BUILD_DIR}/deploy.sh
+    script: ${BUILD_DIR}/activate.sh
+    on:
+      tags: true
+      condition: "$TRAVIS_OS_NAME = linux"
+  - provider: script
+    skip_cleanup: true
+    script: ${BUILD_DIR}/deploy.sh
     on:
       tags: true
       condition: "$TRAVIS_OS_NAME = linux"
