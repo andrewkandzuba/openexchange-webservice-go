@@ -24,7 +24,14 @@ steps:
     env:
       - DOCKER_REGISTRY=gcr.io
       - DOCKER_USER=${PROJECT_ID}
-      - REPO_SLUG=${REPO_NAME}
+      - REPO_SLUG=andrewkandzuba/openexchange-webservice-go
+  - name: 'gcr.io/cloud-builders/kubectl'
+    entrypoint: /bin/sh
+    args: ['sed -e "s|GKE_NAMESPACE|$GKE_NAMESPACE|g" namespace.yaml | kubectl apply -f -']
+    env:
+      - CLOUDSDK_COMPUTE_ZONE=us-central1-b
+      - CLOUDSDK_CONTAINER_CLUSTER=hello-cloudbuild
+      - GKE_NAMESPACE=edu
 secrets:
   - kmsKeyName: projects/gi-gae/locations/global/keyRings/openexchange-webservice-go/cryptoKeys/coveralls_token
     secretEnv:
