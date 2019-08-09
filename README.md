@@ -93,5 +93,32 @@ Following environment variables are mandatory for any successful build:
 ### 2.3. Tagging
 
 By default deployment happens only for [tagged branches](https://goreleaser.com/).
+
+## Chapter 3. Build and deploy with Google Cloud Build (GCB).
+
+Prerequisites:
+
+- Please get yourself familiar with GCB: https://cloud.google.com/cloud-build/docs/
+
+### Build scripts.
+
+GCB triggers your build either upon pushing into every branch or upon pushing new tag.
+
+- [cloudbuild.yaml](cloudbuild.yaml) - GCB configuration that runs on every push. This includes only compilation and test coverage validations.
+- [cloudbuild.release.yaml](cloudbuild.release.yaml) - GCB configuration that in addition includes publishing new release into the repo on github.com, pushing new docker images into Google Container Registry and deploying artifacts to Google Kubernetes Engine. 
+
+Instead of specifying environments variables directly developers have to use [GCB substitutions](https://cloud.google.com/cloud-build/docs/configuring-builds/substitute-variable-values)
+
+![gcb-substitution](documentation/gcb-substitutions.png)
+
+as well as Key Management Service ([KMS](https://cloud.google.com/kms/docs/)) for secrets.  
+
+### Build results.
+
+The successful builds has all steps completed w/o errors
+  
+![gcb-success](documentation/gcb-success.png)
+
+### The list of environment variables is shared with Travis CI.
  
 ### Enjoy!
