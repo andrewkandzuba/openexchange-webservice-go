@@ -33,6 +33,8 @@ $ gcloud container clusters create edu --machine-type=f1-micro --num-nodes=3 --z
 ```bash
 $ sed -e "s|$DOCKER_IMAGE|$DOCKER_IMAGE|g" deployment.yaml | kubectl apply -f -
 ```  
+Note: 
+ - **DOCKER_IMAGE** - should contains full name i.e. `<HOST>/<USER>/<IMAGE_NAME>(:<TAG>)`. In CI integrations this value is being calculated automatically.
 
 #### 1.3. Health check
 
