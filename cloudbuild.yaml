@@ -12,10 +12,6 @@ steps:
   - name: 'gcr.io/cloud-builders/git'
     entrypoint: '/bin/bash'
     args: ['-c', './fixgit.sh']
-  - name: 'ubuntu'
-    args: ['ls', '-las']
-  - name: 'ubuntu'
-    args: ['ls', '-las', '/go/bin/']
   - name: 'gcr.io/cloud-builders/go'
     entrypoint: '/go/bin/goveralls'
     args: ['-coverprofile=coverage.out', '-service=travis-ci']
