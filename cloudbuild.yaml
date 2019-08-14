@@ -1,8 +1,4 @@
 steps:
-  - name: 'gcr.io/cloud-builders/git'
-    args: ['init']
-  - name: 'gcr.io/cloud-builders/git'
-    args: ['commit', '--allow-empty', '-n', '-m', '"Initial commit"']
   - name: 'gcr.io/cloud-builders/go'
     env:
       - GO111MODULE=off
@@ -13,8 +9,13 @@ steps:
     args: ['get', 'github.com/mattn/goveralls']
   - name: 'gcr.io/cloud-builders/go'
     args: ['test', '-coverprofile=coverage.out', '-covermode=atomic', './...']
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: '/bin/bash'
+    args: ['-c', './fixgit.sh']
   - name: 'ubuntu'
     args: ['ls', '-las']
+  - name: 'ubuntu'
+    args: ['ls', '-las', '/go/bin/']
   - name: 'gcr.io/cloud-builders/go'
     entrypoint: '/go/bin/goveralls'
     args: ['-coverprofile=coverage.out', '-service=travis-ci']
