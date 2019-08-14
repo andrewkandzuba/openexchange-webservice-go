@@ -49,6 +49,7 @@ options:
     - KUBECTL_NAMESPACE=${_KUBECTL_NAMESPACE}
     - REPO_NAME=${_REPO_NAME}
     - BUILD_DIR=.
+    - GIT_DISCOVERY_ACROSS_FILESYSTEM=1
   volumes:
     - name: go-modules
       path: /go

@@ -9,6 +9,8 @@ steps:
     args: ['get', 'github.com/mattn/goveralls']
   - name: 'gcr.io/cloud-builders/go'
     args: ['test', '-coverprofile=coverage.out', '-covermode=atomic', './...']
+  - name: 'ubuntu'
+    args: ['ls', '-las']
   - name: 'gcr.io/cloud-builders/go'
     entrypoint: '/go/bin/goveralls'
     args: ['-coverprofile=coverage.out', '-service=travis-ci']
@@ -23,6 +25,7 @@ options:
   env:
     - GOPATH=/go
     - GO111MODULE=on
+    - GIT_DISCOVERY_ACROSS_FILESYSTEM=1
   volumes:
     - name: go-modules
       path: /go
