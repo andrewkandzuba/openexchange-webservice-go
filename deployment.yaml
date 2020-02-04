@@ -15,7 +15,7 @@ spec:
         env: canary
     spec:
       containers:
-        - image: REPLACE_IMAGE
+        - image: DOCKER_IMAGE
           imagePullPolicy: Always
           name: webservice
           ports:

@@ -1,0 +1,60 @@
+steps:
+  - name: 'gcr.io/cloud-builders/go'
+    env:
+      - GO111MODULE=off
+    args: ['get', 'golang.org/x/tools/cmd/cover']
+  - name: 'gcr.io/cloud-builders/go'
+    env:
+      - GO111MODULE=off
+    args: ['get', 'github.com/mattn/goveralls']
+  - name: 'gcr.io/cloud-builders/go'
+    args: ['test', '-coverprofile=coverage.out', '-covermode=atomic', './...']
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: '/bin/bash'
+    args: ['-c', './fixgit.sh']
+  - name: 'gcr.io/cloud-builders/go'
+    entrypoint: '/go/bin/goveralls'
+    args: ['-coverprofile=coverage.out', '-service=travis-ci']
+    secretEnv: ['COVERALLS_TOKEN']
+  - name: 'gcr.io/cloud-builders/go'
+    env:
+      - PROJECT_ROOT=github.com/andrewkandzuba/openexchange-webservice-go
+    args: ['env']
+  - name: goreleaser/goreleaser
+    entrypoint: /bin/sh
+    args: ['-c', 'ls -las && git tag $TAG_NAME && ./release.sh']
+    secretEnv: ['GITHUB_TOKEN']
+  - name: 'gcr.io/cloud-builders/kubectl'
+    entrypoint: /bin/sh
+    args: ['-c', './deploy.sh']
+secrets:
+  - kmsKeyName: projects/gi-gae/locations/global/keyRings/openexchange-webservice-go/cryptoKeys/coveralls_token
+    secretEnv:
+      COVERALLS_TOKEN: |
+        CiQAnCXeaYjhNLCBn7V3WAIEFwLq9BSvMcsN9Ld2V+sKykzGEL4SSgBQL80OofuuIdnEBoeDezpp
+        PbA8B4JisQGLtbRtuKjKVZaca6xNJny172kKh2AexflO7Ao6ybLhQOHG+EgElrRqqkQ25KPCDVbH
+  - kmsKeyName: projects/gi-gae/locations/global/keyRings/openexchange-webservice-go/cryptoKeys/github_token
+    secretEnv:
+      GITHUB_TOKEN: |
+        CiQA3Q85jt+QK87EP3qbR/R3LGLKKo8gbKyMBqm7tWjl6hhtcGsSUQA16XTodsTJtNpSNhbU8QTF
+        5tGHqRowXuPISBTnvl3JYSIbgf4xyK2f9n8m0R/GCurQQjaQ9Mf5kHRIFvn54GbC+qtRsxfXEP7i
+        1Vsd1SHZIg==
+options:
+  env:
+    - GOPATH=/go
+    - GO111MODULE=on
+    - DOCKER_REGISTRY=gcr.io
+    - DOCKER_USER=${PROJECT_ID}
+    - DOCKER_IMAGE=gcr.io/${PROJECT_ID}/openexchange-webservice-go:${TAG_NAME}
+    - CLOUDSDK_COMPUTE_ZONE=${_CLOUDSDK_COMPUTE_ZONE}
+    - CLOUDSDK_CONTAINER_CLUSTER=${_CLOUDSDK_CONTAINER_CLUSTER}
+    - CLOUDSDK_CORE_PROJECT=${_CLOUDSDK_CORE_PROJECT}
+    - KUBECTL_NAMESPACE=${_KUBECTL_NAMESPACE}
+    - REPO_NAME=${_REPO_NAME}
+    - BUILD_DIR=.
+    - GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+  volumes:
+    - name: go-modules
+      path: /go
+images:
+  - 'gcr.io/${PROJECT_ID}/openexchange-webservice-go:${TAG_NAME}'

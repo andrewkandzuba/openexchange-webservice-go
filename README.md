@@ -1,4 +1,4 @@
-[![GitHub release](https://img.shields.io/github/release/andrewkandzuba/openexchange-webservice-go.svg)](https://github.com/andrewkandzuba/openexchange-webservice-go/releases) [![Build Status](https://travis-ci.com/andrewkandzuba/openexchange-webservice-go.svg?branch=master)](https://travis-ci.com/andrewkandzuba/openexchange-webservice-go) [![Coverage Status](https://coveralls.io/repos/github/andrewkandzuba/openexchange-webservice-go/badge.svg?branch=master)](https://coveralls.io/github/andrewkandzuba/openexchange-webservice-go?branch=master)
+[![GitHub release](https://img.shields.io/github/release/andrewkandzuba/openexchange-webservice-go.svg)](https://github.com/andrewkandzuba/openexchange-webservice-go/releases) [![Build Status](https://travis-ci.com/andrewkandzuba/openexchange-webservice-go.svg?branch=master)](https://github.com/andrewkandzuba/openexchange-webservice-go/releases) [![cloud build status](https://storage.googleapis.com/gi-gae.openexchange.io/build/master.svg)](https://github.com/sbsends/cloud-build-badge) [![Coverage Status](https://coveralls.io/repos/github/andrewkandzuba/openexchange-webservice-go/badge.svg?branch=master)](https://coveralls.io/github/andrewkandzuba/openexchange-webservice-go?branch=master)
 
 # Introduction 
 
@@ -31,8 +31,10 @@ $ gcloud container clusters create edu --machine-type=f1-micro --num-nodes=3 --z
 - Login docker to remote registry like Docker Hub. In my case it is [andrewkandzuba](https://cloud.docker.com/repository/docker/andrewkandzuba)` 
 - Run deployment script ending with the image name in Docker Registry.
 ```bash
-$ sed -e "s|REPLACE_IMAGE|$FULL_DOCKER_IMAGE|g" deployment.yaml | kubectl apply -f -
+$ sed -e "s|$DOCKER_IMAGE|$DOCKER_IMAGE|g" deployment.yaml | kubectl apply -f -
 ```  
+Note: 
+ - **DOCKER_IMAGE** - should contains full name i.e. `<HOST>/<USER>/<IMAGE_NAME>(:<TAG>)`. In CI integrations this value is being calculated automatically.
 
 #### 1.3. Health check
 
@@ -84,13 +86,41 @@ Following environment variables are mandatory for any successful build:
     - We use Google Cloud SDK service account authentication method [with key file](https://cloud.google.com/sdk/gcloud/reference/auth/activate-service-account) method to get access to the GKE cluster. 
     - The generated key file should be included into the project but in encrypted form. Travis CI supports [file encryption](https://docs.travis-ci.com/user/encrypting-files/) that greatly facilitates and simplify the solution.
     - Please refer to this example `travis encrypt-file super_secret.txt --add` to understand how the encryption works and how Travis populates these two environment variable.
-- **GKE_PROJECT** - the name of target Google Cloud Project.
-- **GKE_ZONE** - the name of the target GCP cluster zone.
-- **GKE_CLUSTER** - the name of the target GCP cluster. Note that the cluster must be precreated. See "_1.2. Deploy to Google Kubernetes Engine (GKE)_"
-- **GKE_NAMESPACE** - the target Kubernetes namespace. 
+- **CLOUDSDK_CORE_PROJECT** - the name of target Google Cloud Project.
+- **CLOUDSDK_COMPUTE_ZONE** - the name of the target GCP cluster zone.
+- **CLOUDSDK_CONTAINER_CLUSTER** - the name of the target GCP cluster. Note that the cluster must be precreated. See "_1.2. Deploy to Google Kubernetes Engine (GKE)_"
+- **KUBECTL_NAMESPACE** - the target Kubernetes namespace. 
+- **NOTIFY_EMAIL** - send build status to.
 
 ### 2.3. Tagging
 
 By default deployment happens only for [tagged branches](https://goreleaser.com/).
+
+## Chapter 3. Build and deploy with Google Cloud Build (GCB).
+
+Prerequisites:
+
+- Please get yourself familiar with GCB: https://cloud.google.com/cloud-build/docs/
+
+### Build scripts.
+
+GCB triggers your build either upon pushing into every branch or upon pushing new tag.
+
+- [cloudbuild.yaml](cloudbuild.yaml) - GCB configuration that runs on every push. This includes only compilation and test coverage validations.
+- [cloudbuild.release.yaml](cloudbuild.release.yaml) - GCB configuration that in addition includes publishing new release into the repo on github.com, pushing new docker images into Google Container Registry and deploying artifacts to Google Kubernetes Engine. 
+
+Instead of specifying environments variables directly developers have to use [GCB substitutions](https://cloud.google.com/cloud-build/docs/configuring-builds/substitute-variable-values)
+
+![gcb-substitution](documentation/gcb-substitutions.png)
+
+as well as Key Management Service ([KMS](https://cloud.google.com/kms/docs/)) for secrets.  
+
+### Build results.
+
+The successful builds has all steps completed w/o errors
+  
+![gcb-success](documentation/gcb-success.png)
+
+### The list of environment variables is shared with Travis CI.
  
 ### Enjoy!

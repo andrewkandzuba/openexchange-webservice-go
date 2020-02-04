@@ -1,5 +1,10 @@
 project_name: openexchange-webservice-go
 
+release:
+  github:
+    owner: andrewkandzuba
+    name: openexchange-webservice-go
+
 before:
   hooks:
     - git diff --exit-code
@@ -8,7 +13,7 @@ build:
   env:
     - CGO_ENABLED=0
   main: cmd/manager/main.go
-  binary: openexchange-webservice-go
+  binary: '{{.ProjectName}}'
   goos:
     - windows
     - darwin
@@ -21,9 +26,9 @@ archive:
 dockers:
   -
     binaries:
-      - openexchange-webservice-go
+      - '{{.ProjectName}}'
     goos: linux
     goarch: amd64
     image_templates:
-      - "{{.Env.DOCKER_USER}}/{{.ProjectName}}:latest"
-      - "{{.Env.DOCKER_USER}}/{{.ProjectName}}:{{ .Tag }}"
+      - "{{.Env.DOCKER_REGISTRY}}/{{.Env.DOCKER_USER}}/{{.ProjectName}}:latest"
+      - "{{.Env.DOCKER_REGISTRY}}/{{.Env.DOCKER_USER}}/{{.ProjectName}}:{{ .Tag }}"
