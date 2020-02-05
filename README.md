@@ -1,4 +1,4 @@
-[![GitHub release](https://img.shields.io/github/release/andrewkandzuba/openexchange-webservice-go.svg)](https://github.com/andrewkandzuba/openexchange-webservice-go/releases) [![Build Status](https://travis-ci.com/andrewkandzuba/openexchange-webservice-go.svg?branch=master)](https://github.com/andrewkandzuba/openexchange-webservice-go/releases) [![cloud build status](https://storage.googleapis.com/gi-gae.openexchange.io/build/master.svg)](https://github.com/sbsends/cloud-build-badge) [![Coverage Status](https://coveralls.io/repos/github/andrewkandzuba/openexchange-webservice-go/badge.svg?branch=master)](https://coveralls.io/github/andrewkandzuba/openexchange-webservice-go?branch=master)
+[![GitHub release](https://img.shields.io/github/release/andrewkandzuba/openexchange-webservice-go.svg)](https://github.com/andrewkandzuba/openexchange-webservice-go/releases) [![Build Status](https://travis-ci.com/andrewkandzuba/openexchange-webservice-go.svg?branch=master)](https://github.com/andrewkandzuba/openexchange-webservice-go/releases) [![cloud build status](https://storage.googleapis.com/gi-gae.openexchange.io/build/master.svg)](https://github.com/andrewkandzuba/openexchange-webservice-go) [![Coverage Status](https://coveralls.io/repos/github/andrewkandzuba/openexchange-webservice-go/badge.svg?branch=master)](https://coveralls.io/github/andrewkandzuba/openexchange-webservice-go?branch=master)
 
 # Introduction 
 
@@ -63,12 +63,12 @@ This project actively uses it to guaranty high quality of the delivery. All buil
 
 The build script itself exploits to following technologies and services:
 
-- <img src="https://user-images.githubusercontent.com/3613230/41752586-476b0b24-7596-11e8-95fe-8fd3faa21e8a.png" width="30" height="30">[Go Modules](https://github.com/golang/go/wiki/Modules) for dependencies versioned. 
-- <img src="https://coveralls.io/assets/coveralls_logo-bbcdaf48b4b89e4f878f9d12d52733d2e878e44e656bbd59a5e29800ba4ba393.svg" width="30" height="30">[Coverall](https://docs.coveralls.io/go) for tracking test code coverage. 
-- <img src="https://i0.wp.com/www.waldo.be/wp-content/uploads/2017/11/docker-logo.png?fit=269%2C201" width="30" height="30">[Docker](https://www.docker.com/) for building target images. 
-- <img src="https://i0.wp.com/www.waldo.be/wp-content/uploads/2017/11/docker-logo.png?fit=269%2C201" width="30" height="30">[Docker Hub](https://hub.docker.com/) for distributing docker images.
-- <img src="https://github.com/goreleaser.png" width="30" height="30">[GoReleaser](https://goreleaser.com/) for deploying Github releases.
-- <img src="https://cloud.google.com/_static/9b2935c280/images/cloud/cloud-logo.svg" width="30" height="30">[Google Cloud SDK](https://cloud.google.com/sdk/) for deploying services into Google Kubernetes Engine.
+- [<img src="https://user-images.githubusercontent.com/3613230/41752586-476b0b24-7596-11e8-95fe-8fd3faa21e8a.png" width="30" height="30"> Go Modules](https://github.com/golang/go/wiki/Modules) for dependencies versioned. 
+- [<img src="https://d1qb2nb5cznatu.cloudfront.net/startups/i/183776-fe64ad77dfe306eb242f72a12aef00b2-medium_jpg.jpg?buster=1363553191" width="30" height="30"> Coverall](https://docs.coveralls.io/go) for tracking test code coverage. 
+- [<img src="https://i0.wp.com/www.waldo.be/wp-content/uploads/2017/11/docker-logo.png?fit=269%2C201" width="30" height="30"> Docker](https://www.docker.com/) for building target images. 
+- [<img src="https://i0.wp.com/www.waldo.be/wp-content/uploads/2017/11/docker-logo.png?fit=269%2C201" width="30" height="30"> Docker Hub](https://hub.docker.com/) for distributing docker images.
+- [<img src="https://github.com/goreleaser.png" width="30" height="30"> GoReleaser](https://goreleaser.com/) for deploying Github releases.
+- [<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Google-Compute-Engine-Logo.svg/128px-Google-Compute-Engine-Logo.svg.png" width="30" height="30"> Google Cloud SDK](https://cloud.google.com/sdk/) for deploying services into Google Kubernetes Engine.
 
 ### 2.2. Configuring environment variables to the Travis CI build. 
 
