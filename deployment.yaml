@@ -26,7 +26,12 @@ spec:
           livenessProbe:
             httpGet:
               port: 8080
-              path: /health
+              path: /live
+            initialDelaySeconds: 15
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /ready
             initialDelaySeconds: 15
 ---
 apiVersion: v1

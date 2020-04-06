@@ -4,17 +4,17 @@ import "sync"
 
 type State struct {
 	v   bool
-	mux sync.Mutex
+	mux sync.RWMutex
 }
 
-func New() *State {
-	return &State{true, sync.Mutex{}}
+func New(init bool) *State {
+	return &State{init, sync.RWMutex{}}
 }
 
 func (c *State) Set(v bool) {
-	c.mux.Lock()
+	c.mux.RLock()
+	defer c.mux.RUnlock()
 	c.v = v
-	defer c.mux.Unlock()
 }
 
 func (c *State) Get() bool {
