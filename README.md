@@ -57,7 +57,7 @@ Additional handlers
 [Travis CI](https://docs.travis-ci.com/user/for-beginners/) is a Continuous Integration service that automates and facilitates 
 collaborative development and deployment.
 
-This project actively uses it to guaranty high quality of the delivery. All building stages are defined in [.travis.yml](.travis.yml) file. 
+This project actively uses it to guaranty high quality of the delivery. All building stages are defined in [.travis.yml](cd/travis/.travis.yml) file. 
 
 ### 2.1. Technological stack
 
@@ -106,8 +106,8 @@ Prerequisites:
 
 GCB triggers your build either upon pushing into every branch or upon pushing new tag.
 
-- [cloudbuild.yaml](cloudbuild.yaml) - GCB configuration that runs on every push. This includes only compilation and test coverage validations.
-- [cloudbuild.release.yaml](cloudbuild.release.yaml) - GCB configuration that in addition includes publishing new release into the repo on github.com, pushing new docker images into Google Container Registry and deploying artifacts to Google Kubernetes Engine. 
+- [cloudbuild.yaml](cd/gcb/branch/cloudbuild.yaml) - GCB configuration that runs on every push. This includes only compilation and test coverage validations.
+- [cloudbuild.release.yaml](cd/gcb/tag/cloudbuild.release.yaml) - GCB configuration that in addition includes publishing new release into the repo on github.com, pushing new docker images into Google Container Registry and deploying artifacts to Google Kubernetes Engine. 
 
 Instead of specifying environments variables directly developers have to use [GCB substitutions](https://cloud.google.com/cloud-build/docs/configuring-builds/substitute-variable-values)
 
