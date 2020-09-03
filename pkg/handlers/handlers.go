@@ -9,7 +9,10 @@ import (
 	"os"
 )
 
-var alive = state.New()
+var (
+	Alive = state.New(true)
+	Ready = state.New(false)
+)
 
 func HitHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Recieved request from %s", r.RemoteAddr)
@@ -23,12 +26,12 @@ func HitHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func HealthHandler(w http.ResponseWriter, r *http.Request) {
+func LivenessProbeHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("You've hit liveness probe")
 
 	w.Header().Set("Content-Type", "application/json")
 
-	if !alive.Get() {
+	if !Alive.Get() {
 		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = io.WriteString(w, `{"alive": false}`)
 	} else {
@@ -40,7 +43,22 @@ func HealthHandler(w http.ResponseWriter, r *http.Request) {
 func StopHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("You've hit stop handler")
 
-	alive.Set(false)
+	Alive.Set(false)
+	Ready.Set(false)
 
 	w.WriteHeader(http.StatusOK)
+}
+
+func ReadinessProbeHandler(w http.ResponseWriter, r *http.Request)  {
+	log.Printf("You've hit readiness handler")
+
+	w.Header().Set("Content-Type", "application/json")
+
+	if !Ready.Get() {
+		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = io.WriteString(w, `{"ready": false}`)
+	} else {
+		w.WriteHeader(http.StatusOK)
+		_, _ = io.WriteString(w, `{"ready": true}`)
+	}
 }

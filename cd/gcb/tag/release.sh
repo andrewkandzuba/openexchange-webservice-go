@@ -11,7 +11,7 @@ res=$(curl -s -I https://api.github.com/repos/${REPO_NAME}/releases/tags/${TAG_N
 echo ${res}
 if [[ "$res" == "404" ]]
 then
-    curl -sL https://git.io/goreleaser | bash
+    curl -sL https://git.io/goreleaser | bash -s -- config=./cd/gcb/tag/.goreleaser.yml
 fi
 
 echo "Release ${TAG_NAME} is already existed"

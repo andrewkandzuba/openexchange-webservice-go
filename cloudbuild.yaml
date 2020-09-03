@@ -11,7 +11,7 @@ steps:
     args: ['test', '-coverprofile=coverage.out', '-covermode=atomic', './...']
   - name: 'gcr.io/cloud-builders/git'
     entrypoint: '/bin/bash'
-    args: ['-c', './fixgit.sh']
+    args: ['-c', './cd/git/fixgit.sh']
   - name: 'gcr.io/cloud-builders/go'
     entrypoint: '/go/bin/goveralls'
     args: ['-coverprofile=coverage.out', '-service=travis-ci']

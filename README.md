@@ -36,7 +36,7 @@ $ sed -e "s|$DOCKER_IMAGE|$DOCKER_IMAGE|g" deployment.yaml | kubectl apply -f -
 Note: 
  - **DOCKER_IMAGE** - should contains full name i.e. `<HOST>/<USER>/<IMAGE_NAME>(:<TAG>)`. In CI integrations this value is being calculated automatically.
 
-#### 1.3. Health check
+#### 1.3. Liveness probe
 
 - Wait until after service **webservice** receives EXTERNAL-IP:
 ```bash
@@ -49,7 +49,7 @@ webservice   LoadBalancer   10.55.254.157   35.184.166.36   8080:30553/TCP   2m
 
 Additional handlers
 
-- Liveness probe handler is available by `<EXTERNAL-IP>:8080/health`
+- Liveness probe handler is available by `<EXTERNAL-IP>:8080/live`
 - To restart container(s) randomly hit: `<EXTERNAL-IP>:8080/stop` 
 
 ## Chapter 2. Build and deploy with Travis CI. 

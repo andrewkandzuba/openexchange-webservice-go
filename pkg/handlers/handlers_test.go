@@ -21,12 +21,12 @@ func TestHitHandler(t *testing.T) {
 	assert.True(t, strings.Contains(w.Body.String(), "You've hit"))
 }
 
-func TestHealthHandler(t *testing.T) {
-	handler := http.HandlerFunc(HealthHandler)
+func TestLivenessProbeHandler(t *testing.T) {
+	handler := http.HandlerFunc(LivenessProbeHandler)
 	ts := httptest.NewServer(handler)
 	defer ts.Close()
 
-	req := httptest.NewRequest("GET", "/health", nil)
+	req := httptest.NewRequest("GET", "/live", nil)
 	w := httptest.NewRecorder()
 	handler.ServeHTTP(w, req)
 
@@ -34,9 +34,25 @@ func TestHealthHandler(t *testing.T) {
 	assert.EqualValues(t, `{"alive": true}`, w.Body.String())
 }
 
+func TestLivenessProbeHandlerBeforeAndAfterStop(t *testing.T) {
+	Alive.Set(false)
+	assert.False(t, Alive.Get())
+
+	live := http.HandlerFunc(LivenessProbeHandler)
+	ts := httptest.NewServer(live)
+	defer ts.Close()
+
+	req := httptest.NewRequest("GET", "/live", nil)
+	w := httptest.NewRecorder()
+	live.ServeHTTP(w, req)
+
+	assert.EqualValues(t, http.StatusInternalServerError, w.Code)
+	assert.EqualValues(t, `{"alive": false}`, w.Body.String())
+}
+
 func TestStopHandler(t *testing.T) {
-	alive.Set(true)
-	assert.True(t, alive.Get())
+	Alive.Set(true)
+	assert.True(t, Alive.Get())
 
 	stop := http.HandlerFunc(StopHandler)
 	ts := httptest.NewServer(stop)
@@ -49,21 +65,43 @@ func TestStopHandler(t *testing.T) {
 	assert.EqualValues(t, http.StatusOK, w.Code)
 	assert.Empty(t, w.Body.String())
 
-	assert.False(t, alive.Get())
+	assert.False(t, Alive.Get())
 }
 
-func TestHealthHandlerBeforeAndAfterStop(t *testing.T) {
-	alive.Set(false)
-	assert.False(t, alive.Get())
-
-	health := http.HandlerFunc(HealthHandler)
-	ts := httptest.NewServer(health)
+func TestReadinessProbeHandler(t *testing.T) {
+	handler := http.HandlerFunc(ReadinessProbeHandler)
+	ts := httptest.NewServer(handler)
 	defer ts.Close()
 
-	req := httptest.NewRequest("GET", "/health", nil)
+	req := httptest.NewRequest("GET", "/ready", nil)
 	w := httptest.NewRecorder()
-	health.ServeHTTP(w, req)
+	handler.ServeHTTP(w, req)
 
 	assert.EqualValues(t, http.StatusInternalServerError, w.Code)
-	assert.EqualValues(t, `{"alive": false}`, w.Body.String())
+	assert.EqualValues(t, `{"ready": false}`, w.Body.String())
+
+	Ready.Set(true)
+
+	req = httptest.NewRequest("GET", "/ready", nil)
+	w = httptest.NewRecorder()
+	handler.ServeHTTP(w, req)
+
+	assert.EqualValues(t, http.StatusOK, w.Code)
+	assert.EqualValues(t, `{"ready": true}`, w.Body.String())
+}
+
+func TestReadinessProbeHandlerBeforeAndAfterStop(t *testing.T) {
+	Ready.Set(false)
+	assert.False(t, Alive.Get())
+
+	ready := http.HandlerFunc(ReadinessProbeHandler)
+	ts := httptest.NewServer(ready)
+	defer ts.Close()
+
+	req := httptest.NewRequest("GET", "/ready", nil)
+	w := httptest.NewRecorder()
+	ready.ServeHTTP(w, req)
+
+	assert.EqualValues(t, http.StatusInternalServerError, w.Code)
+	assert.EqualValues(t, `{"ready": false}`, w.Body.String())
 }

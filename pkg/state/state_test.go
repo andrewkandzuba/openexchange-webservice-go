@@ -10,7 +10,7 @@ import (
 
 func TestStateConcurrency(t *testing.T)  {
 
-	c := New()
+	c := New(true)
 	assert.EqualValues(t, true, c.Get());
 
 	var wg sync.WaitGroup
